@@ -1,0 +1,207 @@
+// app/controllers/userController.js
+const User = require("../models/User");
+const generateOtp = require("../../utils/generateOTP");
+const sendOTP = require("../../utils/sendOTP");
+const hashPassword = require("../../utils/hashPassword");
+const jwt = require("jsonwebtoken");
+
+
+class UserController {
+  //Đăng ký người dùng
+  async registerUser(req, res) {
+    try {
+      const { name, email, password, yearOfAdmission } = req.body;
+
+      // Kiểm tra người dùng đã tồn tại
+      const existingUser = await User.findOne({ email });
+      if (existingUser) {
+        return res.status(400).json({ message: "Email đã được sử dụng" });
+      }
+
+      // Mã hóa mật khẩu
+      const hashedPassword = await hashPassword(password);
+
+      // Tạo OTP và thời gian hết hạn
+      const otp = generateOtp();
+      const otpExpires = Date.now() + 10 * 60 * 1000; // 10 phút
+
+      // Tạo người dùng mới
+      const newUser = new User({
+        name,
+        email,
+        password: hashedPassword,
+        yearOfAdmission,
+        otp,
+        otpExpires,
+        status: "non-active", // Trạng thái mặc định là không hoạt động
+      });
+
+      await newUser.save();
+
+      // Gửi OTP qua email
+      const { success, error } = await sendOTP(email, otp);
+
+      if (!success) {
+        await User.findByIdAndDelete(newUser._id); // rollback nếu email thất bại
+        return res.status(500).json({ message: "Gửi email thất bại", error });
+      }
+
+      return res
+        .status(201)
+        .json({ message: "Đăng ký thành công. Mã OTP đã gửi đến email." });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+  // Hàm gửi mã OTP
+  async resendOtp(req, res) {
+    try {
+      const { email } = req.body;
+      // Tìm người dùng theo email
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: "Người dùng không tồn tại" });
+      }
+      // Tạo OTP mới và thời gian hết hạn
+      const otp = generateOtp();
+      const otpExpires = Date.now() + 10 * 60 * 1000; // 10 phút
+      user.otp = otp;
+      user.otpExpires = otpExpires;
+      await user.save();
+      // Gửi OTP qua email
+      const { success, error } = await sendOTP(email, otp);
+      if (!success) {
+        return res.status(500).json({ message: "Gửi email thất bại", error });
+      }
+      return res.status(200).json({ message: "Mã OTP đã gửi đến email." });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+  // Xác thực OTP
+  async verifyOtp(req, res) {
+    try {
+      const { email, otp } = req.body;
+      
+      // Tìm người dùng theo email
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: "Người dùng không tồn tại" });
+      }
+
+      // Kiểm tra OTP
+      if (user.otp !== otp) {
+        return res.status(400).json({ message: "OTP không hợp lệ" });
+      }
+
+      // Kiểm tra thời gian hết hạn OTP
+      if (Date.now() > user.otpExpires) {
+        return res.status(400).json({ message: "OTP đã hết hạn" });
+      }
+
+      // Xác thực thành công
+      user.status = "active";
+      user.otp = undefined;
+      user.otpExpires = undefined;
+      await user.save();
+
+      return res.status(200).json({ message: "Xác thực thành công" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+  // Hàm compare mật khẩu
+  async comparePassword(password) {
+    // Sử dụng bcrypt hoặc thư viện khác để so sánh mật khẩu
+    const bcrypt = require("bcrypt");
+    return await bcrypt.compare(password, this.password);
+  }
+
+  // Đăng nhập người dùng
+  async loginUser(req, res) {
+    try {
+      const { email, password } = req.body;
+
+      // Tìm người dùng theo email
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: "Email không tồn tại" });
+      }
+      // Kiểm tra mật khẩu
+      const isMatch = await user.comparePassword(password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Mật khẩu không đúng" });
+      }
+      // Kiểm tra trạng thái người dùng
+      if (user.status !== "active") {
+        return res
+          .status(403)
+          .json({ message: "Tài khoản chưa được kích hoạt" });
+      }
+
+      // Đăng nhập thành công trả về thông tin người dùng trừ mật khẩu
+      const userObj = user.toObject(); // Chuyển từ Mongoose Document thành object
+      delete userObj.password;
+      delete userObj.otp;
+      delete userObj.otpExpires;
+
+      // Tạo JWT token
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "1d" }
+    );
+
+    return res.status(200).json({
+      message: "Đăng nhập thành công",
+      user: userObj,
+      token: token,
+    });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+  // Lấy tất cả người dùng
+  async getAllUsers(req, res) {
+    try {
+      const users = await User.find({}, "-password -otp -otpExpires"); // Trả về tất cả người dùng trừ mật khẩu, OTP và thời gian hết hạn OTP
+      return res.status(200).json(users);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+  // Đặt lại mật khẩu theo email
+  async resetPassword(req, res) {
+    try {
+      const { email, newPassword } = req.body;
+
+      // Tìm người dùng theo email
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ message: "Người dùng không tồn tại" });
+      }
+      // Mã hóa mật khẩu mới
+      const hashedPassword = await hashPassword(newPassword);
+      user.password = hashedPassword;
+      await user.save();
+
+      return res.status(200).json({ message: "Đặt lại mật khẩu thành công" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+}
+
+module.exports = new UserController();
