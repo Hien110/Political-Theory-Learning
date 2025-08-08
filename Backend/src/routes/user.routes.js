@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const UserController = require("../app/controllers/userController");
 const authenticateToken = require("../app/middlewares/authMiddleware");
-const authorize = require("../app/middlewares/authorize");
+const { authorize } = require("../app/middlewares/authorize");
 // Đăng ký người dùng
 router.post("/register", UserController.registerUser);
 // Xác thực OTP
@@ -15,5 +15,9 @@ router.get("/", authenticateToken, authorize("lecturer"), UserController.getAllU
 router.post("/resend-otp", UserController.resendOtp);
 // Đặt lại mật khẩu
 router.post("/reset-password", UserController.resetPassword);
+// Cập nhật thông tin người dùng
+router.put("/update", authenticateToken, UserController.updateUser);
+// Thay đổi mật khẩu
+router.put("/change-password", authenticateToken, UserController.changePassword);
 
 module.exports = router;

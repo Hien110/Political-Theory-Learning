@@ -1,4 +1,11 @@
 @import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply font-['Noto_Serif'];
+}
 
 @theme {
   --color-gray-900: #202225;
@@ -97,6 +104,16 @@
 
   --font-weight-bold: 700;
 
+  --animate-marquee: marquee 10s linear infinite;
+
+  @keyframes marquee {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
 
 }
 .MuiDrawer-paper {

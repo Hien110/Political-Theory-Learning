@@ -8,4 +8,12 @@ const authorize = (...roles) => {
   };
 };
 
-module.exports = authorize;
+// kiểm tra trạng thái người dùng
+const checkUserStatus = (req, res, next) => {
+  if (req.user.status !== "active") {
+    return res.status(403).json({ message: "Tài khoản chưa được kích hoạt" });
+  }
+  next();
+};
+
+module.exports = { authorize, checkUserStatus };

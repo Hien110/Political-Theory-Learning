@@ -3,7 +3,6 @@ import axios from "axios";
 const API_URL = "/api/users"; // sẽ được proxy đến http://localhost:3000/api/users
 
 const userService = {
-
   // Đăng nhập người dùng
   login: async (email, password) => {
     try {
@@ -24,11 +23,11 @@ const userService = {
       return {
         success: false,
         message:
-          error?.response?.data?.message || "Đăng nhập thất bại. Vui lòng thử lại.",
+          error?.response?.data?.message ||
+          "Đăng nhập thất bại. Vui lòng thử lại.",
       };
     }
   },
-
 
   // Đăng xuất người dùng
   logout: () => {
@@ -59,7 +58,8 @@ const userService = {
       return {
         success: false,
         message:
-          error?.response?.data?.message || "Đăng ký thất bại. Vui lòng thử lại.",
+          error?.response?.data?.message ||
+          "Đăng ký thất bại. Vui lòng thử lại.",
       };
     }
   },
@@ -73,7 +73,8 @@ const userService = {
       return {
         success: false,
         message:
-          error?.response?.data?.message || "Gửi lại OTP thất bại. Vui lòng thử lại.",
+          error?.response?.data?.message ||
+          "Gửi lại OTP thất bại. Vui lòng thử lại.",
       };
     }
   },
@@ -81,13 +82,17 @@ const userService = {
   // Xác thực OTP
   verifyOtp: async (email, otp) => {
     try {
-      const response = await axios.post(`${API_URL}/verify-otp`, { email, otp });
+      const response = await axios.post(`${API_URL}/verify-otp`, {
+        email,
+        otp,
+      });
       return { success: true, message: response.data.message };
     } catch (error) {
       return {
         success: false,
         message:
-          error?.response?.data?.message || "Xác thực OTP thất bại. Vui lòng thử lại.",
+          error?.response?.data?.message ||
+          "Xác thực OTP thất bại. Vui lòng thử lại.",
       };
     }
   },
@@ -104,12 +109,73 @@ const userService = {
       return {
         success: false,
         message:
-          error?.response?.data?.message || "Đặt lại mật khẩu thất bại. Vui lòng thử lại.",
+          error?.response?.data?.message ||
+          "Đặt lại mật khẩu thất bại. Vui lòng thử lại.",
       };
     }
   },
-  
 
+  // Cập nhật thông tin người dùng
+  updateUser: async (userData) => {
+    try {
+      const token = userService.getToken();
+
+      console.log(token, "Token for updateUser");
+      
+      const response = await axios.put(
+        `${API_URL}/update`,
+        {
+          name: userData.name,
+          yearOfAdmission: userData.yearOfAdmission,
+          avatar: userData.avatar,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message ||
+          "Cập nhật thông tin thất bại. Vui lòng thử lại.",
+      };
+    }
+  },
+
+  // Thay đổi mật khẩu
+  changePassword: async (currentPassword, newPassword) => {
+    try {
+      const token = userService.getToken();
+console.log(currentPassword, newPassword, "Current and New Passwords in changePassword");
+
+      const response = await axios.put(
+        `${API_URL}/change-password`,
+        {
+          currentPassword,
+          newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message ||
+          "Thay đổi mật khẩu thất bại. Vui lòng thử lại.",
+      };
+    }
+  },
 };
 
 export default userService;

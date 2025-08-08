@@ -5,7 +5,7 @@ const sendOTP = require("../../utils/sendOTP");
 const hashPassword = require("../../utils/hashPassword");
 const jwt = require("jsonwebtoken");
 
-
+const avatarDefault = "https://i.pinimg.com/736x/c6/e5/65/c6e56503cfdd87da299f72dc416023d4.jpg"
 class UserController {
   //Đăng ký người dùng
   async registerUser(req, res) {
@@ -33,6 +33,7 @@ class UserController {
         yearOfAdmission,
         otp,
         otpExpires,
+        avatar: avatarDefault,
         status: "non-active", // Trạng thái mặc định là không hoạt động
       });
 
@@ -153,7 +154,7 @@ class UserController {
 
       // Tạo JWT token
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: user._id, role: user.role, status: user.status },
       process.env.JWT_SECRET_KEY,
       { expiresIn: "1d" }
     );
@@ -202,6 +203,61 @@ class UserController {
     }
   }
 
+    // Cập nhật thông tin người dùng
+    async updateUser(req, res) {
+      try {
+        const userId = req.user.userId; // Lấy ID người dùng từ token
+        const { name, yearOfAdmission, avatar } = req.body;
+
+        // Tìm người dùng theo ID
+        const user = await User.findById(userId);
+        if (!user) {
+          return res.status(404).json({ message: "Người dùng không tồn tại" });
+        }
+
+        // Cập nhật thông tin người dùng
+        user.name = name || user.name;
+        user.yearOfAdmission = yearOfAdmission || user.yearOfAdmission;
+        user.avatar = avatar || user.avatar;
+
+        await user.save();
+
+        return res.status(200).json({ message: "Cập nhật thành công", user });
+      } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: "Đã xảy ra lỗi" });
+      }
+    }
+
+  // Đổi mật khẩu
+  async changePassword(req, res) {
+    try {
+      const userId = req.user.userId; // Lấy ID người dùng từ token
+      const { currentPassword, newPassword } = req.body;
+      console.log(currentPassword, "Current and New Passwords");
+      
+      // Tìm người dùng theo ID
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "Người dùng không tồn tại" });
+      }
+
+      // Kiểm tra mật khẩu hiện tại
+      const isMatch = await user.comparePassword(currentPassword);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Mật khẩu hiện tại không đúng" });
+      }
+
+      // Mã hóa mật khẩu mới
+      user.password = await hashPassword(newPassword);
+      await user.save();
+
+      return res.status(200).json({ message: "Đổi mật khẩu thành công" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
 }
 
 module.exports = new UserController();

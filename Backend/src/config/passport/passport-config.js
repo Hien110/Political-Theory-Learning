@@ -15,6 +15,10 @@ passport.use(
         const existingUser = await User.findOne({ email: profile.emails[0].value });
 
         if (existingUser) {
+          if (existingUser.avatar === "") {
+            existingUser.avatar = profile.photos[0].value; // Cập nhật avatar nếu chưa có
+            await existingUser.save();
+          }
           return done(null, existingUser); // Không tạo mới nếu đã có
         }
 

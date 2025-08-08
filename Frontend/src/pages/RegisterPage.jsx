@@ -104,7 +104,7 @@ const Register = () => {
               </div>
             </div>
             <h1 className="text-2xl font-bold text-yellow-400">
-              HỆ THỐNG LÝ LUẬN CHÍNH TRỊ
+              TRI THỨC LÝ LUẬN CHÍNH TRỊ
             </h1>
           </div>
 

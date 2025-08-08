@@ -5,10 +5,11 @@ import { ROUTE_PATH } from "../constants/routePath";
 import userService from "../services/userService";
 
 import { toast } from "sonner";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const togglePassword = () => {
     setShowPassword((prev) => !prev);
@@ -24,7 +25,7 @@ const Login = () => {
 
       if (result.success) {
         toast.success("Đăng nhập thành công!");
-        // Điều hướng tới trang chính
+        navigate("/");
       } else {
         toast.error(result.message); // Hiển thị lỗi ở góc phải trên
       }
@@ -54,7 +55,7 @@ const Login = () => {
               </div>
             </div>
             <h1 className="text-2xl font-bold text-yellow-400">
-              HỆ THỐNG LÝ LUẬN CHÍNH TRỊ
+              TRI THỨC LÝ LUẬN CHÍNH TRỊ
             </h1>
           </div>
 
@@ -142,6 +143,12 @@ const Login = () => {
               <a
                 href="#"
                 className="w-full inline-flex justify-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+                onClick={(e) => {
+                  e.preventDefault();
+                  toast(
+                    "Tính năng đăng nhập bằng Microsoft hiện chưa được triển khai."
+                  );
+                }}
               >
                 <i className="fab fa-microsoft text-blue-500 mr-2 mt-1" />{" "}
                 Microsoft
@@ -171,7 +178,7 @@ const Login = () => {
 
           {/* Footer */}
           <div className="bg-gray-100 px-6 py-4 border-t border-gray-200 text-center text-xs text-gray-500">
-            <p>&copy; 2025 MiiHii110. Good luck with your studies!</p>
+            <p>&copy; 2025 MiiHii. Good luck with your studies!</p>
           </div>
         </div>
       </div>
