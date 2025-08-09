@@ -1,3 +1,4 @@
+const { get } = require("mongoose");
 const Course = require("../models/Course");
 
 const CourseController = {
@@ -34,6 +35,20 @@ const CourseController = {
             res.status(200).json({data: courses, message: "Lấy khóa học theo giảng viên thành công" });
         } catch (error) {
             res.status(500).json({ message: error.message, message: "Lỗi khi lấy khóa học theo giảng viên" });
+        }
+    },
+
+    // Lấy khóa học theo Id
+    getCourseById: async (req, res) => {
+        try {
+            const courseId = req.params.courseId;
+            const course = await Course.findById(courseId).populate("instructor", "name"); // Lấy thông tin giảng viên
+            if (!course) {
+                return res.status(404).json({ message: "Khóa học không tồn tại" });
+            }
+            res.status(200).json({ data: course, message: "Lấy khóa học thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Lỗi khi lấy khóa học theo ID" });
         }
     }
 

@@ -1,6 +1,17 @@
 import React from "react";
 
+import { ROUTE_PATH } from "../constants/routePath";
 function CourseCard({ course }) {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  const handleDetail = (courseId) => {
+    if (user.role === "lecturer") {
+      // Redirect to the course detail page
+      window.location.href = `${ROUTE_PATH.LECTURER_COURSE_DETAIL.replace(":courseId", courseId)}`;
+    } else {
+      window.location.href = `/course/${courseId}`;
+    }
+  };
   return (
     <div
       key={course._id}
@@ -32,7 +43,12 @@ function CourseCard({ course }) {
         </div>
 
         {/* Nút xem chi tiết đặt cuối container */}
-        <button className="mt-auto w-full py-2 rounded-lg bg-gradient-to-r from-red-500 to-red-400 text-white font-medium text-sm shadow-md transition-colors duration-500 ease-in-out hover:from-red-600 hover:to-red-500">
+        <button
+          onClick={() => {
+            handleDetail(course._id);
+          }}
+          className="cursor-pointer mt-auto w-full py-2 rounded-lg bg-gradient-to-r from-red-500 to-red-400 text-white font-medium text-sm shadow-md transition-colors duration-500 ease-in-out hover:from-red-600 hover:to-red-500"
+        >
           Xem chi tiết
         </button>
       </div>

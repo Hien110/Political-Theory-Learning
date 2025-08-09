@@ -25,6 +25,7 @@ const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionB
 
 const ManageCoursesListPage = React.lazy(() => import("../pages/ManageCoursesListPage"));
 const ManageCourseCreatePage = React.lazy(() => import("../pages/ManageCourseCreatePage"));
+const ManageCourseDetailPage = React.lazy(() => import("../pages/ManageCourseDetailPage"));
 
 const ManageNewsPage = React.lazy(() => import("../pages/ManageNewsPage"));
 
@@ -50,6 +51,7 @@ const AppRoutes = [
 
   { path: ROUTE_PATH.LECTURER_COURSES, page: ManageCoursesListPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_CREATE_COURSE, page: ManageCourseCreatePage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_COURSE_DETAIL, page: ManageCourseDetailPage, layout: lecturerLayout },
 
   { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout },
 

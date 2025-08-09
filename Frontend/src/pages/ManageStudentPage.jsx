@@ -51,7 +51,7 @@ function ManageStudentPage() {
   };
 
   return (
-    <div className="font-['Noto_Serif'] bg-white">
+    <div className="bg-white">
       <h1 className="text-3xl font-bold mb-6 text-black">Quản lý sinh viên</h1>
 
       <div className="overflow-x-auto rounded-lg border border-gray-200">

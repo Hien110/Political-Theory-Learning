@@ -45,7 +45,7 @@ const Header = () => {
 
           {/* Desktop Menu */}
           <nav className="hidden md:block z-10">
-            <ul className="flex items-center space-x-6">
+            <ul className="flex items-center space-x-10">
                 <li >
                   <Link
                     to={ROUTE_PATH.HOME}

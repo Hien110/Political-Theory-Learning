@@ -91,7 +91,7 @@ function ManageCourseCreatePage() {
   };
 
   return (
-    <div className="bg-white font-['Noto_Serif']">
+    <div className="bg-white">
       <h1 className="text-3xl font-bold mb-6 text-gray-800">Tạo môn học</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">

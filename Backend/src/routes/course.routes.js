@@ -11,4 +11,7 @@ router.post("/create", authenticateToken, authorize("lecturer"), CourseControlle
 // Lấy khóa học theo người tạo
 router.get("/instructor", authenticateToken, CourseController.getCoursesByInstructor);
 
+// Lấy khóa học theo ID
+router.get("/:courseId", CourseController.getCourseById);
+
 module.exports = router;

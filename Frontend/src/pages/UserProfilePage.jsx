@@ -126,7 +126,7 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className=" bg-gray-50 py-10 px-10 font-['Noto_Serif']  flex space-x-10">
+      <div className=" bg-gray-50 py-10 px-10 flex space-x-10">
         <div className="w-1/3  min-h-[400px]">
           <div className="border border-gray-300 rounded-lg shadow-lg p-6 bg-white">
             <div className="flex flex-col items-center space-y-4">
@@ -306,7 +306,7 @@ const UserProfile = () => {
                     variant="outlined"
                     fullWidth
                     sx={{
-                      fontFamily: "Noto_Serif",
+                      // fontFamily: "Noto_Serif",
                       fontSize: "14px",
                       paddingX: 4,
                       textTransform: "none",

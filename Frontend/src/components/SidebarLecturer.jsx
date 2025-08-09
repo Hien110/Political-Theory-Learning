@@ -6,8 +6,8 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  ThemeProvider,
-  createTheme,
+  // ThemeProvider,
+  // createTheme,
   Avatar,
   Typography,
   Divider
@@ -33,20 +33,18 @@ const navItems = [
   { label: "Tin tức", icon: <NewspaperIcon />, path: "/lecturer/news" },
 ];
 
-// Theme font Noto Serif
-const lecturerTheme = createTheme({
-  typography: {
-    fontFamily: "'Noto Serif', serif",
-  },
-});
+// // Theme font Noto Serif
+// const lecturerTheme = createTheme({
+//   typography: {
+//     fontFamily: "'Noto Serif', serif",
+//   },
+// });
 
 export default function SidebarLecturer({ children }) {
   const location = useLocation();
   const user = JSON.parse(localStorage.getItem("user")) || {};
 
   return (
-    <ThemeProvider theme={lecturerTheme}>
-      <CssBaseline />
       <Box sx={{ display: "flex" }}>
         <Drawer
           variant="permanent"
@@ -149,6 +147,5 @@ export default function SidebarLecturer({ children }) {
           {children}
         </Box>
       </Box>
-    </ThemeProvider>
   );
 }

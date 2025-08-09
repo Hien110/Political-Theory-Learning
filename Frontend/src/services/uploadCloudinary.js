@@ -35,3 +35,70 @@ export const uploadToCloudinary = async (file) => {
     return null;
   }
 };
+
+// Upload nhiều ảnh lên cloudinary
+export const uploadMultipleImagesToCloudinary = async (files) => {
+  if (!files || files.length === 0) {
+    console.error("Không có file nào được chọn để upload.");
+    return [];
+  }
+
+  const uploadPromises = files.map(file => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "PoliticalTheory");
+
+    return fetch("https://api.cloudinary.com/v1_1/doyjostnc/image/upload", {
+      method: "POST",
+      body: formData,
+    }).then(res => {
+      if (!res.ok) throw new Error(`Lỗi HTTP: ${res.status}`);
+      return res.json();
+    });
+  });
+
+  try {
+    const results = await Promise.all(uploadPromises);
+    // Lọc các kết quả có secure_url
+    return results
+      .filter(data => data.secure_url)
+      .map(data => data.secure_url);
+  } catch (error) {
+    console.error("Lỗi khi upload ảnh lên Cloudinary:", error);
+    return [];
+  }
+};
+export const uploadMultipleFilesToCloudinary = async (files) => {
+  if (!files || files.length === 0) {
+    console.error("Không có file nào được chọn để upload.");
+    return [];
+  }
+
+  const endpoint = "https://api.cloudinary.com/v1_1/doyjostnc/raw/upload";
+  const uploadPreset = "PoliticalTheory";
+
+  const uploadPromises = files.map((file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", uploadPreset);
+
+    return fetch(endpoint, {
+      method: "POST",
+      body: formData,
+    }).then((res) => {
+      if (!res.ok) throw new Error(`Lỗi HTTP: ${res.status}`);
+      return res.json();
+    });
+  });
+
+  try {
+    const results = await Promise.all(uploadPromises);
+
+    return results
+      .filter((data) => data.secure_url)
+      .map((data) => data.secure_url);
+  } catch (error) {
+    console.error("Lỗi khi upload file lên Cloudinary:", error);
+    return [];
+  }
+};
