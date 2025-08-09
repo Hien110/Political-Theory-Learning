@@ -19,5 +19,9 @@ router.post("/reset-password", UserController.resetPassword);
 router.put("/update", authenticateToken, UserController.updateUser);
 // Thay đổi mật khẩu
 router.put("/change-password", authenticateToken, UserController.changePassword);
+// Lấy tất cả student
+router.get("/students", authenticateToken, authorize("lecturer"), UserController.getAllStudents);
+// Khóa hoặc hủy tài khoản student
+router.put("/students/lock", authenticateToken, authorize("lecturer"), UserController.toggleStudentLock);
 
 module.exports = router;

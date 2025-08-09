@@ -120,8 +120,6 @@ const userService = {
     try {
       const token = userService.getToken();
 
-      console.log(token, "Token for updateUser");
-      
       const response = await axios.put(
         `${API_URL}/update`,
         {
@@ -151,7 +149,11 @@ const userService = {
   changePassword: async (currentPassword, newPassword) => {
     try {
       const token = userService.getToken();
-console.log(currentPassword, newPassword, "Current and New Passwords in changePassword");
+      console.log(
+        currentPassword,
+        newPassword,
+        "Current and New Passwords in changePassword"
+      );
 
       const response = await axios.put(
         `${API_URL}/change-password`,
@@ -173,6 +175,51 @@ console.log(currentPassword, newPassword, "Current and New Passwords in changePa
         message:
           error?.response?.data?.message ||
           "Thay đổi mật khẩu thất bại. Vui lòng thử lại.",
+      };
+    }
+  },
+
+  // Lấy tất cả student
+  getAllStudents: async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/students`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message ||
+          "Lấy danh sách sinh viên thất bại. Vui lòng thử lại.",
+      };
+    }
+  },
+
+  // Khóa tài khoản student
+  lockStudentAccount: async (studentId) => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.put(`${API_URL}/students/lock`, {
+        studentId,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return { success: true, message: response.data.message };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message ||
+          "Khóa tài khoản thất bại. Vui lòng thử lại.",
       };
     }
   },

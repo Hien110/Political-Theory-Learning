@@ -19,7 +19,7 @@ const AuthCallback = () => {
       localStorage.setItem("user", JSON.stringify(parsedUser));
 
       if (parsedUser.role === "lecturer") {
-        navigate("/admin/dashboard");
+        navigate("/");
       } else {
         navigate("/");
       }

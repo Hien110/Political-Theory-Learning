@@ -234,7 +234,6 @@ class UserController {
     try {
       const userId = req.user.userId; // Lấy ID người dùng từ token
       const { currentPassword, newPassword } = req.body;
-      console.log(currentPassword, "Current and New Passwords");
       
       // Tìm người dùng theo ID
       const user = await User.findById(userId);
@@ -253,6 +252,36 @@ class UserController {
       await user.save();
 
       return res.status(200).json({ message: "Đổi mật khẩu thành công" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+  // Lấy mọi tài khoản với role student
+  async getAllStudents(req, res) {
+    try {
+      const students = await User.find({ role: "student" }, "-password -otp -otpExpires");
+      return res.status(200).json(students);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
+
+  // Khóa hoặc hủy khóa tài khoản student
+  async toggleStudentLock(req, res) {
+    try {
+      const { studentId } = req.body;
+      const student = await User.findById(studentId);
+      if (!student) {
+        return res.status(404).json({ message: "Người dùng không tồn tại" });
+      }
+
+      student.status = student.status === "locked" ? "active" : "locked";
+      await student.save();
+
+      return res.status(200).json({ message: "Cập nhật trạng thái tài khoản thành công" });
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Đã xảy ra lỗi" });

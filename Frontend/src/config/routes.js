@@ -3,6 +3,7 @@ import React from "react";
 import { ROUTE_PATH } from "../constants/routePath";
 
 import studentLayout from "../layouts/student-layout";
+import lecturerLayout from "../layouts/lecturer-layout";
 
 // Authentication pages
 const LoginPage = React.lazy(() => import("../pages/LoginPage"));
@@ -16,6 +17,13 @@ const HomePage = React.lazy(() => import("../pages/HomePage"));
 
 // user management pages
 const UserProfilePage = React.lazy(() => import("../pages/UserProfilePage"));
+
+// lecturer pages
+const StatisticsPage = React.lazy(() => import("../pages/StatisticsPage"));
+const ManageStudentPage = React.lazy(() => import("../pages/ManageStudentPage"));
+const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionBankPage"));
+const ManageCoursesPage = React.lazy(() => import("../pages/ManageCoursesPage"));
+const ManageNewsPage = React.lazy(() => import("../pages/ManageNewsPage"));
 
 const AppRoutes = [
 
@@ -31,6 +39,14 @@ const AppRoutes = [
 
   // User management routes
   { path: ROUTE_PATH.USER_PROFILE, page: UserProfilePage, layout: studentLayout },
+
+  // lecturer routes
+  { path: ROUTE_PATH.LECTURER_STATISTICS, page: StatisticsPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_STUDENTS, page: ManageStudentPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_QUESTION_BANK, page: ManageQuestionBankPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_COURSES, page: ManageCoursesPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout },
+
 ];
 
 export default AppRoutes;

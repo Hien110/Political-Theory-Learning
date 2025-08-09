@@ -85,6 +85,7 @@ const UserProfile = () => {
         // Cập nhật lại thông tin người dùng trong localStorage
         const updatedUser = { ...user, ...userData, avatar: imageUrl };
         localStorage.setItem("user", JSON.stringify(updatedUser));
+        window.location.reload(); // Tải lại trang để cập nhật thông tin
         setShowUpdateModal(false);
       } else {
         toast.error(response.message);
