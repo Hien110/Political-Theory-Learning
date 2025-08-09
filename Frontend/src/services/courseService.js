@@ -41,7 +41,28 @@ const courseService = {
     } catch (error) {
       return {
         success: false,
-        message: error?.response?.data?.message || "Lỗi khi lấy khóa học theo giảng viên",
+        message:
+          error?.response?.data?.message ||
+          "Lỗi khi lấy khóa học theo giảng viên",
+      };
+    }
+  },
+
+  // Lấy khóa học theo Id
+  getCourseById: async (courseId) => {
+    try {
+      const response = await axios.get(`${API_URL}/${courseId}`);
+      
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message || "Lỗi khi lấy khóa học theo ID",
       };
     }
   },

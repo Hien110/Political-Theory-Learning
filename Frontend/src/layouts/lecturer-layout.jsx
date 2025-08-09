@@ -26,8 +26,8 @@ function ScrollToTopButton() {
         onClick={scrollToTop}
         variant="default"
         size="icon"
-        round="full"
-        className="fixed bottom-8 right-8 z-50 bg-custom-blue text-white shadow-lg hover:bg-custom-bluehover2 transition"
+        round="lg"
+        className="fixed bottom-8 right-8 z-50 border border-red-600 bg-white text-red-600 shadow-lg hover:bg-red-50 transition"
         aria-label="Lên đầu trang"
       >
         <span className="text-2xl">↑</span>

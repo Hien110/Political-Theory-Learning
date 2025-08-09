@@ -6,7 +6,7 @@ const lessonSchema = new mongoose.Schema({
   content: { type: String }, // text content hoặc markdown
   videoUrl: { type: String },
   imageUrls: [{ type: String }],
-  pdfUrls: [{ type: String }],
+  fileUrls: [{ type: String }],
 }, { timestamps: true });
 
 module.exports = mongoose.model("Lesson", lessonSchema);

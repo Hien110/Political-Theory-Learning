@@ -85,7 +85,7 @@ const Register = () => {
 
   return (
     <div
-      className="relative min-h-screen bg-cover bg-center font-['Noto_Serif']"
+      className="relative min-h-screen bg-cover bg-center"
       style={{
         backgroundImage: `url('https://inkythuatso.com/uploads/thumbnails/800/2023/03/hinh-anh-bac-ho-doc-ban-tuyen-ngon-doc-lap-3-04-14-07-55.jpg')`,
       }}
