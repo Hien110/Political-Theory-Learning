@@ -119,3 +119,9 @@ body {
 .MuiDrawer-paper {
   margin-top: 100px;
 }
+
+.ck-content ul,
+.ck-content ol {
+  padding-left: 1.5rem; /* hoặc 2rem nếu muốn rộng hơn */
+}
+

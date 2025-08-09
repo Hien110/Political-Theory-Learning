@@ -149,11 +149,6 @@ const userService = {
   changePassword: async (currentPassword, newPassword) => {
     try {
       const token = userService.getToken();
-      console.log(
-        currentPassword,
-        newPassword,
-        "Current and New Passwords in changePassword"
-      );
 
       const response = await axios.put(
         `${API_URL}/change-password`,

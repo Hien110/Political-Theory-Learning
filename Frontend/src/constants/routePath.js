@@ -16,7 +16,8 @@ export const  ROUTE_PATH = {
 
     // Lecturer routes
     LECTURER_STATISTICS: "/lecturer/statistics",
-    LECTURER_COURSES: "/lecturer/courses",
+    LECTURER_COURSES: "/lecturer/courses/list",
+    LECTURER_CREATE_COURSE: "/lecturer/courses/create",
     LECTURER_STUDENTS: "/lecturer/students",
     LECTURER_QUESTION_BANK: "/lecturer/question-bank",
     LECTURER_NEWS: "/lecturer/news",
