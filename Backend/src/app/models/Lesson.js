@@ -7,6 +7,7 @@ const lessonSchema = new mongoose.Schema({
   videoUrl: { type: String },
   imageUrls: [{ type: String }],
   fileUrls: [{ type: String }],
+  deleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Lesson", lessonSchema);

@@ -21,6 +21,8 @@ export const  ROUTE_PATH = {
     LECTURER_CREATE_COURSE: "/lecturer/courses/create",
     LECTURER_COURSE_DETAIL: "/lecturer/courses/:courseId",
 
+    LECTURER_LESSON_DETAIL: "/lecturer/courses/:courseId/lessons/:lessonId",
+
     LECTURER_STUDENTS: "/lecturer/students",
     LECTURER_QUESTION_BANK: "/lecturer/question-bank",
     LECTURER_NEWS: "/lecturer/news",

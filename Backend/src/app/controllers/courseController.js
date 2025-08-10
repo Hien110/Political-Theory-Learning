@@ -20,7 +20,7 @@ const CourseController = {
     // Lấy toàn bộ khóa học
     getAllCourses: async (req, res) => {
         try {
-            const courses = await Course.find();
+            const courses = await Course.find({ deleted: false });
             res.status(200).json({ success: true, data: courses });
         } catch (error) {
             res.status(500).json({ success: false, message: error.message });
@@ -31,7 +31,7 @@ const CourseController = {
     getCoursesByInstructor: async (req, res) => {
         try {
             const instructorId = req.user.userId; // Lấy ID người dùng từ token
-            const courses = await Course.find({ instructor: instructorId });
+            const courses = await Course.find({ instructor: instructorId, deleted: false });
             res.status(200).json({data: courses, message: "Lấy khóa học theo giảng viên thành công" });
         } catch (error) {
             res.status(500).json({ message: error.message, message: "Lỗi khi lấy khóa học theo giảng viên" });
@@ -50,7 +50,32 @@ const CourseController = {
         } catch (error) {
             res.status(500).json({ message: "Lỗi khi lấy khóa học theo ID" });
         }
-    }
+    },
+
+    //Xóa khóa học
+    deleteCourse: async (req, res) => {
+        try {
+            const courseId = req.params.courseId;
+            const deletedCourse = await Course.findByIdAndUpdate(courseId, { deleted: true }, { new: true });
+            res.status(200).json({ data: deletedCourse, message: "Xóa khóa học thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Lỗi khi xóa khóa học" });
+        }
+    },
+
+    //Cập nhập khóa học
+    updateCourse: async (req, res) => {
+        try {
+            const courseId = req.params.courseId;
+            const updatedCourse = await Course.findByIdAndUpdate(courseId, req.body, { new: true });
+            if (!updatedCourse) {
+                return res.status(404).json({ message: "Khóa học không tồn tại" });
+            }
+            res.status(200).json({ data: updatedCourse, message: "Cập nhật khóa học thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Lỗi khi cập nhật khóa học" });
+        }
+    },
 
 };
 

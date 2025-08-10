@@ -5,6 +5,7 @@ const courseSchema = new mongoose.Schema({
   description: { type: String },
   thumbnail: { type: String }, // ảnh đại diện
   instructor: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+  deleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model("Course", courseSchema);

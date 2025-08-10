@@ -66,6 +66,48 @@ const courseService = {
       };
     }
   },
+
+  // Xóa khóa học
+  deleteCourse: async (courseId) => {
+    try {
+      const response = await axios.put(`${API_URL}/deleted/${courseId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${userService.getToken()}`,
+        },
+      });
+      return {
+        success: true,
+        message: response.data.message,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message || "Lỗi khi xóa khóa học",
+      };
+    }
+  },
+
+  updateCourse: async (courseId, updatedData) => {
+    try {
+      const response = await axios.put(`${API_URL}/update/${courseId}`, updatedData, {
+        headers: {
+          Authorization: `Bearer ${userService.getToken()}`,
+        },
+      });
+      return {
+        success: true,
+        message: response.data.message,
+        course: response.data.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message || "Lỗi khi cập nhật khóa học",
+      };
+    }
+  },
 };
 
 export default courseService;

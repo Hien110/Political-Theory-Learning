@@ -27,6 +27,8 @@ const ManageCoursesListPage = React.lazy(() => import("../pages/ManageCoursesLis
 const ManageCourseCreatePage = React.lazy(() => import("../pages/ManageCourseCreatePage"));
 const ManageCourseDetailPage = React.lazy(() => import("../pages/ManageCourseDetailPage"));
 
+const ManageLessonDetailPage = React.lazy(() => import("../pages/ManageLessonDetailPage"));
+
 const ManageNewsPage = React.lazy(() => import("../pages/ManageNewsPage"));
 
 const AppRoutes = [
@@ -52,6 +54,8 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_COURSES, page: ManageCoursesListPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_CREATE_COURSE, page: ManageCourseCreatePage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_COURSE_DETAIL, page: ManageCourseDetailPage, layout: lecturerLayout },
+
+  { path: ROUTE_PATH.LECTURER_LESSON_DETAIL, page: ManageLessonDetailPage, layout: lecturerLayout },
 
   { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout },
 
