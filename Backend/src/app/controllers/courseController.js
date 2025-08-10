@@ -21,9 +21,9 @@ const CourseController = {
     getAllCourses: async (req, res) => {
         try {
             const courses = await Course.find({ deleted: false });
-            res.status(200).json({ success: true, data: courses });
+            res.status(200).json({ data: courses, message: "Lấy toàn bộ khóa học thành công" });
         } catch (error) {
-            res.status(500).json({ success: false, message: error.message });
+            res.status(500).json({ message: error.message, message: "Lỗi khi lấy toàn bộ khóa học" });
         }
     },
 

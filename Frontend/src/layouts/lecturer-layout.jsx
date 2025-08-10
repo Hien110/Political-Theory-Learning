@@ -27,7 +27,7 @@ function ScrollToTopButton() {
         variant="default"
         size="icon"
         round="lg"
-        className="fixed bottom-8 right-8 z-50 border border-red-600 bg-white text-red-600 shadow-lg hover:bg-red-50 transition"
+        className="cursor-pointer fixed bottom-8 right-8 z-50 border border-red-600 bg-white text-red-600 shadow-lg hover:bg-red-50 transition"
         aria-label="Lên đầu trang"
       >
         <span className="text-2xl">↑</span>

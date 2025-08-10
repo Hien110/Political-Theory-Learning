@@ -31,6 +31,9 @@ const ManageLessonDetailPage = React.lazy(() => import("../pages/ManageLessonDet
 
 const ManageNewsPage = React.lazy(() => import("../pages/ManageNewsPage"));
 
+// Student pages
+const CourseDetailPage = React.lazy(() => import("../pages/CourseDetailPage"));
+
 const AppRoutes = [
 
   // Authentication routes
@@ -58,6 +61,9 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_LESSON_DETAIL, page: ManageLessonDetailPage, layout: lecturerLayout },
 
   { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout },
+
+  //Student routes
+  { path: ROUTE_PATH.STUDENT_COURSE_DETAIL, page: CourseDetailPage, layout: studentLayout },
 
 ];
 

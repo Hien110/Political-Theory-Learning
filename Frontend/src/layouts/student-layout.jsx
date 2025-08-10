@@ -26,8 +26,7 @@ function ScrollToTopButton() {
         onClick={scrollToTop}
         variant="default"
         size="icon"
-        round="full"
-        className="fixed bottom-8 right-8 z-50 bg-orange-500 text-white shadow-lg hover:bg-orange-600 transition"
+        className="cursor-pointer fixed bottom-8 right-8 z-50 border border-red-600 bg-white text-red-600 shadow-lg hover:bg-red-50 transition"
         aria-label="Lên đầu trang"
       >
         <span className="text-2xl">↑</span>
@@ -40,9 +39,7 @@ function MainLayout({ children }) {
   return (
     <div>
       <Header />
-      <div className="mx-auto pt-20">
-        {children}
-      </div>
+      <div className="mx-auto pt-20">{children}</div>
       <ScrollToTopButton />
       <Footer />
     </div>

@@ -50,10 +50,6 @@ function ManageCourseDetailPage() {
   const lessonImagesRef = useRef(null);
   const lessonFilesRef = useRef(null);
   // Load danh sách bài học theo courseId
-  const fetchLessons = async () => {
-    const res = await lessonService.getLessonsByCourse(courseId);
-    if (res.success) setLessons(res.data);
-  };
 
   useEffect(() => {
     // Load course chi tiết
@@ -66,6 +62,11 @@ function ManageCourseDetailPage() {
           description: res.data.description,
         });
       }
+    };
+
+    const fetchLessons = async () => {
+      const res = await lessonService.getLessonsByCourse(courseId);
+      if (res.success) setLessons(res.data);
     };
 
     fetchCourse();
