@@ -2,7 +2,7 @@ const Lesson = require('../models/Lesson');
 
 class LessonController {
     // Tạo bài học
-    static async createLesson(req, res) {
+    async createLesson(req, res) {
         try {
             const courseId = req.params.courseId;
             const newLesson = new Lesson({
@@ -18,10 +18,10 @@ class LessonController {
     }
 
     // Lấy toàn bộ bài học theo khóa học
-    static async getLessonsByCourse(req, res) {
+     async getLessonsByCourse(req, res) {
         try {
             const courseId = req.params.courseId;
-            const lessons = await Lesson.find({ course: courseId });
+            const lessons = await Lesson.find({ course: courseId, deleted: false });
             res.status(200).json({ data: lessons, message: "Lấy danh sách bài học thành công" });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -29,10 +29,10 @@ class LessonController {
     }
 
     // Lấy bài học theo ID
-    static async getLessonById(req, res) {
+    async getLessonById(req, res) {
         try {
             const lessonId = req.params.lessonId;
-            const lesson = await Lesson.findById(lessonId).populate("course", "title"); // Lấy thông tin khóa học
+            const lesson = await Lesson.findById(lessonId, { deleted: false }).populate("course", "title"); // Lấy thông tin khóa học
             if (!lesson) {
                 return res.status(404).json({ message: "Bài học không tồn tại" });
             }
@@ -41,6 +41,37 @@ class LessonController {
             res.status(500).json({ message: "Lỗi khi lấy bài học theo ID" });
         }
     }
+
+    //xóa bài học
+    async deleteLesson(req, res) {
+        try {
+            const lessonId = req.params.lessonId;
+            const deletedLesson = await Lesson.findByIdAndUpdate(lessonId, { deleted: true }, { new: true });
+            if (!deletedLesson) {
+                return res.status(404).json({ message: "Bài học không tồn tại" });
+            }
+            res.status(200).json({ data: deletedLesson, message: "Xóa bài học thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Lỗi khi xóa bài học" });
+        }
+    }
+
+    // Cập nhập bài học
+    async updateLesson(req, res) {
+        try {
+            const lessonId = req.params.lessonId;
+            const updatedData = req.body;
+
+            const updatedLesson = await Lesson.findByIdAndUpdate(lessonId, updatedData, { new: true });
+            if (!updatedLesson) {
+                return res.status(404).json({ message: "Bài học không tồn tại" });
+            }
+            res.status(200).json({ data: updatedLesson, message: "Cập nhật bài học thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Lỗi khi cập nhật bài học" });
+        }
+    }
+
 }
 
-module.exports = LessonController;
+module.exports = new LessonController();

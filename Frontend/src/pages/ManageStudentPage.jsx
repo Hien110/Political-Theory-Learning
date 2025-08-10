@@ -105,7 +105,7 @@ function ManageStudentPage() {
                       setShowLockModal(true);
                       setSelectedStudent(student);
                     }}
-                    className={`px-4 py-1.5 rounded-lg text-white font-medium shadow-sm transition-all ${
+                    className={`cursor-pointer px-4 py-1.5 rounded-lg text-white font-medium shadow-sm transition-all ${
                       student.status === "locked"
                         ? "bg-green-600 hover:bg-green-700"
                         : "bg-red-600 hover:bg-red-700"
@@ -113,7 +113,7 @@ function ManageStudentPage() {
                   >
                     {student.status === "locked" ? "Mở khóa" : "Khóa"}
                   </button>
-                  <button className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-all">
+                  <button className="cursor-pointer px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-all">
                     Xem
                   </button>
                 </td>

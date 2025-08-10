@@ -14,4 +14,10 @@ router.get("/instructor", authenticateToken, CourseController.getCoursesByInstru
 // Lấy khóa học theo ID
 router.get("/:courseId", CourseController.getCourseById);
 
+// Xóa khóa học
+router.put("/deleted/:courseId", authenticateToken, authorize("lecturer"), CourseController.deleteCourse);
+
+// Cập nhật khóa học
+router.put("/update/:courseId", authenticateToken, authorize("lecturer"), CourseController.updateCourse);
+
 module.exports = router;
