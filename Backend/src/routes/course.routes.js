@@ -20,4 +20,7 @@ router.put("/deleted/:courseId", authenticateToken, authorize("lecturer"), Cours
 // Cập nhật khóa học
 router.put("/update/:courseId", authenticateToken, authorize("lecturer"), CourseController.updateCourse);
 
+// Lấy toàn bộ khóa học
+router.get("/", CourseController.getAllCourses);
+
 module.exports = router;

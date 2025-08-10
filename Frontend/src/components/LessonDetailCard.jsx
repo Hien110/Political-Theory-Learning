@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useRef, useState } from "react";
 import { convertYouTubeUrlToEmbed } from "../utils/youtube";
 

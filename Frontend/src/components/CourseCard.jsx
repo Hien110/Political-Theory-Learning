@@ -5,16 +5,20 @@ function CourseCard({ course }) {
   const user = JSON.parse(localStorage.getItem("user"));
 
   const handleDetail = (courseId) => {
+    if (!user) {
+      // Redirect to the login page if user is not logged in
+      window.location.href = ROUTE_PATH.LOGIN;
+      return;
+    }
     if (user.role === "lecturer") {
       // Redirect to the course detail page
       window.location.href = `${ROUTE_PATH.LECTURER_COURSE_DETAIL.replace(":courseId", courseId)}`;
-    } else {
-      window.location.href = `/course/${courseId}`;
+    } else if (user.role === "student") {
+      window.location.href = `${ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(":courseId", courseId)}`;
     }
   };
   return (
     <div
-      key={course._id}
       className="bg-white border border-gray-100 rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden group flex flex-col"
     >
       {/* Thumbnail */}
