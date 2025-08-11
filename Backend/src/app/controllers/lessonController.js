@@ -72,6 +72,15 @@ class LessonController {
         }
     }
 
+    // Lấy tất cả bài học
+    async getAllLessons(req, res) {
+        try {
+            const lessons = await Lesson.find({ deleted: false }).populate("course", "title");
+            res.status(200).json({ data: lessons, message: "Lấy tất cả bài học thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Lỗi khi lấy tất cả bài học" });
+        }
+    }
 }
 
 module.exports = new LessonController();

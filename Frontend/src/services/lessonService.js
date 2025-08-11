@@ -99,6 +99,21 @@ const lessonService = {
       return { success: false, message: "Cập nhật bài học thất bại" };
     }
   },
+
+  // Lấy tất cả bài học
+  getAllLessons: async () => {
+    try {
+      const response = await axios.get(`${API_URL}`);
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message,
+      };
+    } catch (error) {
+      console.error("Lỗi khi lấy tất cả bài học:", error);
+      return { success: false, message: "Lấy tất cả bài học thất bại" };
+    }
+  }
 };
 
 export default lessonService;
