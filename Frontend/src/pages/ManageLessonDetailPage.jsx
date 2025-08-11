@@ -11,8 +11,6 @@ import lessonService from '../services/lessonService'
 function ManageLessonDetailPage() {
   const { lessonId } = useParams();
 
-  console.log(lessonId);
-
   const [lesson, setLesson] = useState(null);
 
   useEffect(() => {

@@ -51,6 +51,11 @@ function ManageCourseDetailPage() {
   const lessonFilesRef = useRef(null);
   // Load danh sách bài học theo courseId
 
+  const fetchLessons = async () => {
+    const res = await lessonService.getLessonsByCourse(courseId);
+    if (res.success) setLessons(res.data);
+  };
+
   useEffect(() => {
     // Load course chi tiết
     const fetchCourse = async () => {
@@ -64,11 +69,6 @@ function ManageCourseDetailPage() {
       }
     };
 
-    const fetchLessons = async () => {
-      const res = await lessonService.getLessonsByCourse(courseId);
-      if (res.success) setLessons(res.data);
-    };
-
     fetchCourse();
     fetchLessons();
   }, [courseId]);
@@ -77,12 +77,12 @@ function ManageCourseDetailPage() {
   const handleCreateLesson = async (e) => {
     e.preventDefault();
     if (!lessonTitle.trim()) {
-      alert("Vui lòng nhập tiêu đề bài học");
+      toast.error("Vui lòng nhập tiêu đề bài học");
       return;
     }
 
     if (!lessonContent.trim()) {
-      alert("Vui lòng nhập nội dung bài học");
+      toast.error("Vui lòng nhập nội dung bài học");
       return;
     }
 
@@ -250,7 +250,7 @@ function ManageCourseDetailPage() {
     }
   };
   if (!course) {
-    return <div>Đang tải khóa học...</div>;
+    return <div className="min-h-screen">Đang tải khóa học...</div>;
   }
 
   return (
@@ -421,8 +421,11 @@ function ManageCourseDetailPage() {
           <button
             type="submit"
             disabled={loadingLesson}
-            className="w-full py-3 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
-          >
+            className={`w-full py-3 bg-red-600 text-white font-bold rounded-lg 
+                      hover:bg-red-700 transition-colors duration-300 
+                      disabled:opacity-60 
+                      ${loadingLesson ? "cursor-wait" : "cursor-pointer"}`}
+                      >
             {loadingLesson ? "Đang tạo..." : "Tạo bài học"}
           </button>
         </form>

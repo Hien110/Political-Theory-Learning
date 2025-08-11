@@ -39,7 +39,7 @@ export const uploadToCloudinary = async (file) => {
 // Upload nhiều ảnh lên cloudinary
 export const uploadMultipleImagesToCloudinary = async (files) => {
   if (!files || files.length === 0) {
-    console.error("Không có file nào được chọn để upload.");
+    // console.error("Không có file nào được chọn để upload.");
     return [];
   }
 
@@ -70,7 +70,7 @@ export const uploadMultipleImagesToCloudinary = async (files) => {
 };
 export const uploadMultipleFilesToCloudinary = async (files) => {
   if (!files || files.length === 0) {
-    console.error("Không có file nào được chọn để upload.");
+    // console.error("Không có file nào được chọn để upload.");
     return [];
   }
 

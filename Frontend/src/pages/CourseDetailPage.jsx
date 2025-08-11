@@ -40,6 +40,11 @@ function CourseDetailPage() {
     fetchLessons();
   }, [courseId]);
 
+  const handleViewLesson = (lessonId) => {
+    // Navigate to the lesson detail page
+    window.location.href = ROUTE_PATH.STUDENT_LESSON_DETAIL.replace(":courseId", courseId).replace(":lessonId", lessonId);
+  };
+
   if (!course) {
     return <div>Đang tải khóa học...</div>;
   }
@@ -81,7 +86,7 @@ function CourseDetailPage() {
                   </div>
                   <div className="">
                     <button
-                      // onClick={() => handleViewLesson(lesson._id)}
+                      onClick={() => handleViewLesson(lesson._id)}
                       className="cursor-pointer text-yellow-600 border border-yellow-600 px-3 py-1 text-sm rounded-lg hover:bg-yellow-600 hover:text-white font-medium transition duration-300"
                     >
                       Xem chi tiết
