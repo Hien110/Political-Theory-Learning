@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const questionBankSchema = new mongoose.Schema({
   lesson: { type: mongoose.Schema.Types.ObjectId, ref: "Lesson", required: false }, 
+  course: { type: mongoose.Schema.Types.ObjectId, ref: "Course", required: true },
   question: { type: String, required: true },
   options: [
     {
@@ -9,8 +10,7 @@ const questionBankSchema = new mongoose.Schema({
       isCorrect: { type: Boolean, required: true }
     }
   ],
-  tags: [String], // ví dụ: ["OOP", "NodeJS", "React"]
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" } // giảng viên tạo
+  deleted: { type: Boolean, default: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model("QuestionBank", questionBankSchema);

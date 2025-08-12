@@ -21,7 +21,10 @@ const UserProfilePage = React.lazy(() => import("../pages/UserProfilePage"));
 // lecturer pages
 const StatisticsPage = React.lazy(() => import("../pages/StatisticsPage"));
 const ManageStudentPage = React.lazy(() => import("../pages/ManageStudentPage"));
+
+// Question Bank
 const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionBankPage"));
+const ManageQuestionBankDetailPage = React.lazy(() => import("../pages/ManageQuestionBankDetailPage"));
 
 const ManageCoursesListPage = React.lazy(() => import("../pages/ManageCoursesListPage"));
 const ManageCourseCreatePage = React.lazy(() => import("../pages/ManageCourseCreatePage"));
@@ -54,7 +57,10 @@ const AppRoutes = [
   // lecturer routes
   { path: ROUTE_PATH.LECTURER_STATISTICS, page: StatisticsPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_STUDENTS, page: ManageStudentPage, layout: lecturerLayout },
+
+  // Question Bank
   { path: ROUTE_PATH.LECTURER_QUESTION_BANK, page: ManageQuestionBankPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_QUESTION_BANK_DETAIL, page: ManageQuestionBankDetailPage, layout: lecturerLayout },
 
   { path: ROUTE_PATH.LECTURER_COURSES, page: ManageCoursesListPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_CREATE_COURSE, page: ManageCourseCreatePage, layout: lecturerLayout },
