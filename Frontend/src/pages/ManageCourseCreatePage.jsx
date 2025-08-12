@@ -104,7 +104,7 @@ function ManageCourseCreatePage() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 shadow-sm"
+            className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-sm"
             placeholder="Nhập tiêu đề khóa học"
           />
         </div>

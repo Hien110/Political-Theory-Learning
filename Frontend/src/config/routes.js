@@ -26,11 +26,17 @@ const ManageStudentPage = React.lazy(() => import("../pages/ManageStudentPage"))
 const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionBankPage"));
 const ManageQuestionBankDetailPage = React.lazy(() => import("../pages/ManageQuestionBankDetailPage"));
 
+//Courses
 const ManageCoursesListPage = React.lazy(() => import("../pages/ManageCoursesListPage"));
 const ManageCourseCreatePage = React.lazy(() => import("../pages/ManageCourseCreatePage"));
 const ManageCourseDetailPage = React.lazy(() => import("../pages/ManageCourseDetailPage"));
 
 const ManageLessonDetailPage = React.lazy(() => import("../pages/ManageLessonDetailPage"));
+
+//Quiz
+const ManageQuizPage = React.lazy(() => import("../pages/ManageQuizPage"));
+const ManageQuizListPage = React.lazy(() => import("../pages/ManageQuizListPage"));
+const ManageQuizCreatePage = React.lazy(() => import("../pages/ManageQuizCreatePage"));
 
 const ManageNewsPage = React.lazy(() => import("../pages/ManageNewsPage"));
 
@@ -62,11 +68,17 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_QUESTION_BANK, page: ManageQuestionBankPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_QUESTION_BANK_DETAIL, page: ManageQuestionBankDetailPage, layout: lecturerLayout },
 
+  //Courses
   { path: ROUTE_PATH.LECTURER_COURSES, page: ManageCoursesListPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_CREATE_COURSE, page: ManageCourseCreatePage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_COURSE_DETAIL, page: ManageCourseDetailPage, layout: lecturerLayout },
 
   { path: ROUTE_PATH.LECTURER_LESSON_DETAIL, page: ManageLessonDetailPage, layout: lecturerLayout },
+
+  //Quiz
+  { path: ROUTE_PATH.LECTURER_QUIZ, page: ManageQuizPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_QUIZ_LIST, page: ManageQuizListPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_QUIZ_CREATE, page: ManageQuizCreatePage, layout: lecturerLayout },
 
   { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout },
 

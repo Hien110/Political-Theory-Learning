@@ -28,7 +28,8 @@ function ManageQuestionBankDetailPage() {
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
-  const [showDeleteAllQuestionsModal, setShowDeleteAllQuestionsModal] = useState(false);
+  const [showDeleteAllQuestionsModal, setShowDeleteAllQuestionsModal] =
+    useState(false);
 
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -224,7 +225,9 @@ function ManageQuestionBankDetailPage() {
   /** Xóa tất cả câu hỏi */
   const handleDeleteAllQuestions = async () => {
     try {
-      const res = await questionBankService.deleteAllQuestionsByCourse(courseId);
+      const res = await questionBankService.deleteAllQuestionsByCourse(
+        courseId
+      );
       if (res.success) {
         setQuestionList([]);
         toast.success("Đã xóa tất cả câu hỏi!");
@@ -358,7 +361,11 @@ function ManageQuestionBankDetailPage() {
           <input
             type="file"
             accept=".xlsx, .xls"
-            className="border border-gray-300 p-2 rounded-lg"
+            className="border border-gray-300 p-2 rounded-lg file:mr-4 file:py-2 file:px-4
+                     file:rounded-full file:border-0
+                     file:text-sm file:font-semibold
+                     file:bg-red-50 file:text-red-700
+                     hover:file:bg-red-100"
             onChange={handleFileChange}
           />
         </div>

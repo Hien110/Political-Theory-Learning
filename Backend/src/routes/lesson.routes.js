@@ -5,7 +5,6 @@ const authenticateToken = require("../app/middlewares/authMiddleware");
 const { authorize } = require("../app/middlewares/authorize");
 
 const LessonController = require('../app/controllers/lessonController');
-const { route } = require('./auth.routes');
 
 // Tạo bài học
 router.post('/:courseId/lessons', authenticateToken, authorize("lecturer"), LessonController.createLesson);

@@ -67,7 +67,7 @@ function HomePage() {
               </div>
               <h3 className="text-xl font-bold mb-2">Câu hỏi ôn tập</h3>
               <p className="text-gray-700">
-                Hàng trăm câu hỏi tự luận có đáp án chi tiết giúp củng cố kiến
+                Hàng trăm câu hỏi trắc có đáp án chi tiết giúp củng cố kiến
                 thức
               </p>
             </div>
@@ -84,64 +84,6 @@ function HomePage() {
           </div>
         </section>
 
-        <section className="mb-16 bg-red-50 rounded-lg p-8">
-          <h2 className="text-3xl font-bold text-center mb-12 text-red-800">
-            Nhận Xét Của Người Học
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <img
-                  src="https://randomuser.me/api/portraits/women/44.jpg"
-                  alt="Người dùng"
-                  className="w-12 h-12 rounded-full mr-4"
-                />
-                <div>
-                  <h4 className="font-bold">Nguyễn Thị Hương</h4>
-                  <p className="text-gray-600 text-sm">Sinh viên Đại học KHXH&NV</p>
-                </div>
-              </div>
-              <p className="text-gray-700">
-                "Trang web giúp mình hệ thống kiến thức rõ ràng, dễ hiểu. Các
-                câu hỏi ôn tập rất sát với chương trình học."
-              </p>
-              <div className="mt-3 text-yellow-500">
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-              </div>
-            </div>
-
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="flex items-center mb-4">
-                <img
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
-                  alt="Người dùng"
-                  className="w-12 h-12 rounded-full mr-4"
-                />
-                <div>
-                  <h4 className="font-bold">Trần Văn Minh</h4>
-                  <p className="text-gray-600 text-sm">Cán bộ Đoàn</p>
-                </div>
-              </div>
-              <p className="text-gray-700">
-                "Tôi thường xuyên sử dụng trang web để ôn tập và chuẩn bị cho
-                các kỳ thi lý luận chính trị. Giao diện thân thiện, nội dung
-                chất lượng."
-              </p>
-              <div className="mt-3 text-yellow-500">
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star"></i>
-                <i className="fas fa-star-half-alt"></i>
-              </div>
-            </div>
-          </div>
-        </section>
       </main>
     </div>
   );

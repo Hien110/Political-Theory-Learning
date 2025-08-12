@@ -156,7 +156,7 @@ const QuestionBankController = {
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ success: false, message: "Lỗi khi tạo câu hỏi" });
+      res.status(500).json({ success: false, message: "File excel không hợp lệ, vui lòng xem file mẫu" });
     } finally {
       // Xóa file tạm nếu tồn tại
       if (req.file.path) {
