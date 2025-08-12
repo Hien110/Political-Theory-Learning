@@ -28,6 +28,8 @@ function ManageQuestionBankDetailPage() {
   const [showDeleteQuestionModal, setShowDeleteQuestionModal] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
 
+  const [showDeleteAllQuestionsModal, setShowDeleteAllQuestionsModal] = useState(false);
+
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   /** Lấy danh sách câu hỏi */
@@ -130,6 +132,8 @@ function ManageQuestionBankDetailPage() {
     setShowEditModal(false);
     setEditQuestion(null);
     setShowDeleteQuestionModal(false);
+    setSelectedQuestion(null);
+    setShowDeleteAllQuestionsModal(false);
   };
 
   /** Cập nhật field trong edit */
@@ -197,9 +201,13 @@ function ManageQuestionBankDetailPage() {
   /** Xóa 1 câu hỏi */
   const handleDeleteQuestion = async () => {
     try {
-      const res = await questionBankService.deleteQuestion(selectedQuestion._id);
+      const res = await questionBankService.deleteQuestion(
+        selectedQuestion._id
+      );
       if (res.success) {
-        setQuestionList((prev) => prev.filter((q) => q._id !== selectedQuestion._id));
+        setQuestionList((prev) =>
+          prev.filter((q) => q._id !== selectedQuestion._id)
+        );
         toast.success("Xóa câu hỏi thành công!");
       } else {
         toast.error(`Xóa thất bại: ${res.message}`);
@@ -215,9 +223,8 @@ function ManageQuestionBankDetailPage() {
 
   /** Xóa tất cả câu hỏi */
   const handleDeleteAllQuestions = async () => {
-    if (!window.confirm("Xác nhận xóa tất cả câu hỏi?")) return;
     try {
-      const res = await questionBankService.deleteQuestionsByCourse(courseId);
+      const res = await questionBankService.deleteAllQuestionsByCourse(courseId);
       if (res.success) {
         setQuestionList([]);
         toast.success("Đã xóa tất cả câu hỏi!");
@@ -227,6 +234,38 @@ function ManageQuestionBankDetailPage() {
     } catch (error) {
       console.error(error);
       toast.error("Lỗi khi xóa tất cả câu hỏi.");
+    } finally {
+      setShowDeleteAllQuestionsModal(false);
+    }
+  };
+
+  const [file, setFile] = useState(null);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (!file) {
+      toast.error("Vui lòng chọn file Excel");
+      return;
+    }
+
+    try {
+      const res = await questionBankService.uploadExcel(courseId, file);
+      if (res.success) {
+        toast.success(res.message);
+        setFile(null); // Reset file input
+        fetchQuestion();
+      } else {
+        toast.error(res.message);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Đã xảy ra lỗi khi tải file");
     }
   };
 
@@ -302,7 +341,7 @@ function ManageQuestionBankDetailPage() {
           </ul>
           <div className="mt-6 flex justify-end">
             <button
-              onClick={() => setShowDeleteQuestionModal(true)}
+              onClick={() => setShowDeleteAllQuestionsModal(true)}
               className="cursor-pointer py-3 px-5 rounded-xl text-red-500 font-semibold bg-white border border-red-500 hover:bg-red-500 hover:text-white shadow-md transition-all duration-300"
             >
               🗑 Xóa tất cả câu hỏi
@@ -310,7 +349,39 @@ function ManageQuestionBankDetailPage() {
           </div>
         </>
       )}
+      {/* Tạo câu hỏi bằng excel */}
+      <div className="mt-6">
+        <h2 className="text-2xl font-bold mb-6 text-red-700 border-b border-gray-300 pb-2">
+          Tạo câu hỏi bằng Excel
+        </h2>
+        <div>
+          <input
+            type="file"
+            accept=".xlsx, .xls"
+            className="border border-gray-300 p-2 rounded-lg"
+            onChange={handleFileChange}
+          />
+        </div>
+        <p className="text-sm text-gray-500 mt-2">
+          Chọn file Excel chứa câu hỏi để tải lên
+        </p>
+        {/*  */}
+        <button
+          onClick={handleUpload}
+          className="cursor-pointer mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-all duration-300"
+        >
+          Tạo câu hỏi
+        </button>
 
+        {/* File mẫu */}
+        <a
+          href={`${import.meta.env.BASE_URL}TaoCauHoiMau.xlsx`}
+          download
+          className="text-sm text-blue-600 hover:underline mt-2 block"
+        >
+          Tải về file mẫu
+        </a>
+      </div>
       {/* Form tạo câu hỏi */}
       <div className="mt-10">
         <h2 className="text-2xl font-bold mb-6 text-red-700 border-b border-gray-300 pb-2">
@@ -386,7 +457,7 @@ function ManageQuestionBankDetailPage() {
             type="submit"
             className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
           >
-            Lưu câu hỏi
+            Tạo câu hỏi
           </button>
         </form>
       </div>
@@ -500,57 +571,112 @@ function ManageQuestionBankDetailPage() {
         )}
       </AnimatePresence>
 
-        {/* Modal for deleting course */}
-            <AnimatePresence>
-              {showDeleteQuestionModal && (
-                <motion.div
-                  className="fixed inset-0 bg-[#000000c4] flex w-full justify-center items-center z-1200"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <motion.div
-                    className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.9 }}
-                    transition={{ duration: 0.3 }}
+      {/* Modal for deleting course */}
+      <AnimatePresence>
+        {showDeleteQuestionModal && (
+          <motion.div
+            className="fixed inset-0 bg-[#000000c4] flex w-full justify-center items-center z-1200"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h2 className="text-xl font-bold text-red-500 mb-4">
+                Xóa câu hỏi
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Bạn có chắc chắn muốn xóa câu hỏi này không?
+              </p>
+              <form
+                className="space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleDeleteQuestion();
+                }}
+              >
+                {/* Buttons */}
+                <div className="text-right space-x-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleCloseModal}
+                    className="px-4 bg-gray-300 rounded hover:bg-gray-400 transition-colors duration-300 cursor-pointer w-full text-[14px]"
                   >
-                    <h2 className="text-xl font-bold text-red-500 mb-4">
-                      Xóa câu hỏi
-                    </h2>
-                    <p className="text-gray-600 mb-4">
-                      Bạn có chắc chắn muốn xóa câu hỏi này không?
-                    </p>
-                    <form
-                      className="space-y-4"
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        handleDeleteQuestion();
-                      }}
-                    >
-                      {/* Buttons */}
-                      <div className="text-right space-x-2 flex justify-end">
-                        <button
-                          type="button"
-                          onClick={handleCloseModal}
-                          className="px-4 bg-gray-300 rounded hover:bg-gray-400 transition-colors duration-300 cursor-pointer w-full text-[14px]"
-                        >
-                          Hủy
-                        </button>
-      
-                        <button
-                          type="submit"
-                          className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 text-white transition-colors duration-300 cursor-pointer w-full text-[14px]"
-                        >
-                          Xác nhận xóa
-                        </button>
-                      </div>
-                    </form>
-                  </motion.div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    Hủy
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 text-white transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                  >
+                    Xác nhận xóa
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal for deleting all questions by course */}
+      <AnimatePresence>
+        {showDeleteAllQuestionsModal && (
+          <motion.div
+            className="fixed inset-0 bg-[#000000c4] flex w-full justify-center items-center z-1200"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <motion.div
+              className="bg-white rounded-lg p-6 w-full max-w-lg shadow-lg"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h2 className="text-xl font-bold text-red-500 mb-4">
+                Xóa câu hỏi
+              </h2>
+              <p className="text-gray-600 mb-4">
+                Bạn có chắc chắn muốn xóa toàn bộ ngân hàng câu hỏi không?
+              </p>
+              <p className="text-sm text-red-600 mb-4 text-center">
+                Tất cả câu hỏi sẽ bị xóa và không thể khôi phục.
+              </p>
+              <form
+                className="space-y-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleDeleteAllQuestions();
+                }}
+              >
+                {/* Buttons */}
+                <div className="text-right space-x-2 flex justify-end">
+                  <button
+                    type="button"
+                    onClick={handleCloseModal}
+                    className="px-4 bg-gray-300 rounded hover:bg-gray-400 transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                  >
+                    Hủy
+                  </button>
+
+                  <button
+                    type="submit"
+                    className="px-4 py-2 bg-red-600 rounded hover:bg-red-700 text-white transition-colors duration-300 cursor-pointer w-full text-[14px]"
+                  >
+                    Xác nhận xóa
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
