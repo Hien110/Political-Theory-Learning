@@ -6,8 +6,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  // ThemeProvider,
-  // createTheme,
   Avatar,
   Typography,
   Divider
@@ -18,6 +16,7 @@ import NewspaperIcon from "@mui/icons-material/Newspaper";
 import PeopleIcon from "@mui/icons-material/People";
 import BookIcon from "@mui/icons-material/Book";
 import QuizIcon from '@mui/icons-material/Quiz';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 
 import { yellow } from "@mui/material/colors";
 
@@ -30,7 +29,8 @@ const navItems = [
   { label: "Quản lý sinh viên", icon: <PeopleIcon />, path: ROUTE_PATH.LECTURER_STUDENTS },
   { label: "Quản lý môn học", icon: <BookIcon />, path: ROUTE_PATH.LECTURER_COURSES },
   { label: "Ngân hàng câu hỏi", icon: <QuizIcon />, path: ROUTE_PATH.LECTURER_QUESTION_BANK },
-  { label: "Tin tức", icon: <NewspaperIcon />, path: "/lecturer/news" },
+  { label: "Quản lý bài kiểm tra", icon: <HelpCenterIcon />, path: ROUTE_PATH.LECTURER_QUIZ },
+  { label: "Tin tức", icon: <NewspaperIcon />, path: ROUTE_PATH.LECTURER_NEWS },
 ];
 
 // // Theme font Noto Serif

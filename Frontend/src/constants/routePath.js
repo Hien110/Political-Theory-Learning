@@ -28,6 +28,10 @@ export const  ROUTE_PATH = {
     LECTURER_QUESTION_BANK: "/lecturer/question-bank",
     LECTURER_QUESTION_BANK_DETAIL: "/lecturer/question-bank/:courseId",
 
+    LECTURER_QUIZ: "/lecturer/quiz",
+    LECTURER_QUIZ_LIST: "/lecturer/quiz/:courseId/list",
+    LECTURER_QUIZ_CREATE: "/lecturer/quiz/:courseId/create",
+
     LECTURER_NEWS: "/lecturer/news",
 
     // Student routes

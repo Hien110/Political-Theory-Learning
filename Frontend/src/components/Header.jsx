@@ -16,7 +16,7 @@ import Button from "@mui/material/Button";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const navItems = ["Trang chủ", "Môn học", "Ôn tập", "Luyện thi"];
+  const navItems = ["Trang chủ", "Môn học", "Ôn luyện"];
 
   // Lấy user từ localStorage (nếu có)
   const userData = JSON.parse(localStorage.getItem("user"));
@@ -67,15 +67,7 @@ const Header = () => {
                     href="#"
                     className="text-white font-medium hover:text-yellow-300 transition-colors"
                   >
-                    Ôn tập
-                  </a>
-                </li>
-                <li >
-                  <a
-                    href="#"
-                    className="text-white font-medium hover:text-yellow-300 transition-colors"
-                  >
-                    Luyện thi
+                    Ôn luyện
                   </a>
                 </li>
 
