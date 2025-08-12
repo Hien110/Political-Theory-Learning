@@ -195,7 +195,10 @@ function ManageCourseDetailPage() {
     e.preventDefault();
     const file = e.dataTransfer.files[0];
     if (file) {
-      setThumbnail(file);
+      setEditedCourse((prev) => ({
+        ...prev,
+        thumbnail: file,
+      }));
       setPreviewImage(URL.createObjectURL(file));
     }
   };
