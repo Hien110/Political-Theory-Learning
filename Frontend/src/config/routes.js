@@ -46,6 +46,8 @@ const CourseDetailPage = React.lazy(() => import("../pages/CourseDetailPage"));
 
 const LessonDetailPage = React.lazy(() => import("../pages/LessonDetailPage"));
 
+const TestQuizPage = React.lazy(() => import("../pages/TestQuizPage"));
+
 const AppRoutes = [
 
   // Authentication routes
@@ -87,8 +89,9 @@ const AppRoutes = [
   //Student routes
   { path: ROUTE_PATH.STUDENT_COURSE_DETAIL, page: CourseDetailPage, layout: studentLayout },
 
-  { path: ROUTE_PATH.STUDENT_LESSON_DETAIL, page: LessonDetailPage, layout: studentLayout }
+  { path: ROUTE_PATH.STUDENT_LESSON_DETAIL, page: LessonDetailPage, layout: studentLayout },
 
+  { path: ROUTE_PATH.STUDENT_QUIZ_TEST, page: TestQuizPage,  },
 ];
 
 export default AppRoutes;

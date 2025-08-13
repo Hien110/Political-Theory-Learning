@@ -40,4 +40,6 @@ export const  ROUTE_PATH = {
     STUDENT_COURSE_DETAIL: "/student/courses/:courseId",
 
     STUDENT_LESSON_DETAIL: "/student/courses/:courseId/lessons/:lessonId",
+
+    STUDENT_QUIZ_TEST: "/student/quiz/:quizId/test",
 }
