@@ -141,6 +141,7 @@ const questionBankService = {
 
       return {
         success: true,
+        data: response.data.data,
         message: response.data.message || "Tải lên file Excel thành công",
       };
     } catch (error) {

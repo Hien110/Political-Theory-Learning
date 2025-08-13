@@ -8,5 +8,13 @@ const { authorize } = require("../app/middlewares/authorize");
 
 router.get('/:courseId/quizzes', QuizController.getQuizzesByCourse);
 router.post('/:courseId/quizzes', authenticateToken, authorize("lecturer"), QuizController.createQuiz);
+//xóa bài kiểm tra
+router.put('/:courseId/quizzes/:quizId', authenticateToken, authorize("lecturer"), QuizController.deleteQuiz);
+
+//Lấy quiz theo Id 
+router.get('/quizzes/:quizId', authenticateToken, QuizController.getQuizById);
+
+//Update quiz theo id
+router.put('/quizzes/:quizId', authenticateToken, authorize("lecturer"), QuizController.updateQuiz);
 
 module.exports = router;

@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import * as XLSX from "xlsx";
+import React, { useEffect, useRef, useState } from "react";
 
 import questionBankService from "../services/questionBankService";
 import QuizService from "../services/quizService";
@@ -8,35 +6,36 @@ import QuizService from "../services/quizService";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 
+import { ROUTE_PATH } from "../constants/routePath"; // import đường dẫn
+
 function ManageQuizCreatePage() {
   const { courseId } = useParams();
   const [title, setTitle] = useState("");
-  const [lessonId, setLessonId] = useState("");
   const [timeLimit, setTimeLimit] = useState(1);
   const [attempts, setAttempts] = useState(1);
 
-  const [courses, setCourses] = useState([]);
-  const [lessons, setLessons] = useState([]);
   const [questionBank, setQuestionBank] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
 
   // Chế độ chọn câu hỏi: manual | excel | random
   const [questionSource, setQuestionSource] = useState("manual");
-  const [randomCount, setRandomCount] = useState(0);
+  const [randomCount, setRandomCount] = useState(1);
 
-  // Lấy danh sách course
-  useEffect(() => {
-    axios.get("/api/courses").then((res) => {
-      setCourses(res.data);
-    });
-  }, []);
+  const [file, setFile] = useState(null);
+  let ids = [];
+  let totalQuestions = 0;
+  const fileInputRef = useRef();
+
+  const resetFile = () => {
+    setFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = null; // reset input HTML
+    }
+  };
 
   // Lấy danh sách lessons & question bank khi chọn course
   useEffect(() => {
     if (courseId) {
-      axios.get(`/api/lessons?courseId=${courseId}`).then((res) => {
-        setLessons(res.data);
-      });
       questionBankService.getQuestionByCourse(courseId).then((res) => {
         setQuestionBank(res.data);
       });
@@ -57,30 +56,8 @@ function ManageQuizCreatePage() {
   // Upload từ file Excel
   const handleExcelUpload = (e) => {
     const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const data = new Uint8Array(evt.target.result);
-      const workbook = XLSX.read(data, { type: "array" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-      // jsonData sẽ là mảng object, bạn cần map sang format backend
-      // Ở đây giả định file excel có cột "questionBankRef" là ID
-      const ids = jsonData.map((row) => row.questionBankRef).filter(Boolean);
-      setSelectedQuestions(ids);
-    };
-    reader.readAsArrayBuffer(file);
-  };
-
-  // Random từ QuestionBank
-  const handleRandomSelect = () => {
-    if (randomCount > 0 && questionBank.length > 0) {
-      const shuffled = [...questionBank].sort(() => 0.5 - Math.random());
-      const selected = shuffled.slice(0, randomCount).map((q) => q._id);
-      setSelectedQuestions(selected);
+    if (file) {
+      setFile(file);
     }
   };
 
@@ -88,26 +65,68 @@ function ManageQuizCreatePage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (questionSource === "excel" && !file) {
+      toast.error("Vui lòng tải lên file Excel");
+      return;
+    }
+
+    if (questionSource === "excel") {
+      try {
+        const res = await questionBankService.uploadExcel(courseId, file);
+        if (res.success) {
+          setSelectedQuestions(res.data.map((q) => q._id));
+          ids = res.data.map((q) => q._id);
+          totalQuestions = res.data.length;
+        } else {
+          toast.error(res.message || "Lỗi khi tải câu hỏi từ Excel");
+        }
+      } catch (error) {
+        console.log(error);
+
+        toast.error("Lỗi khi tải câu hỏi từ Excel", error.message);
+        return;
+      }
+    }
+
+    if (questionSource === "manual") {
+      ids = selectedQuestions;
+      totalQuestions = selectedQuestions.length;
+      if (totalQuestions === 0) {
+        toast.error("Vui lòng chọn ít nhất một câu hỏi");
+        return;
+      }
+    }
+
+    if (questionSource === "random") {
+      if (randomCount <= 0 || randomCount > questionBank.length) {
+        toast.error("Ngân hàng câu hỏi không đủ");
+        return;
+      }
+
+      totalQuestions = randomCount;
+    }
+
+    
+
     const newQuiz = {
       course: courseId,
       title,
-      questions: selectedQuestions.map((qId) => ({ questionBankRef: qId })),
+      questions: ids.map((qId) => ({ questionBankRef: qId })),
       timeLimit,
-      totalQuestions: selectedQuestions.length,
+      totalQuestions,
       attempts,
+      typeQuiz: questionSource,
     };
 
-    
     try {
       const response = await QuizService.createQuiz(courseId, newQuiz);
       if (response.success) {
-        toast.success("Tạo quiz thành công!");
         // Reset form
-        setTitle("");
-        setLessonId("");
-        setTimeLimit(1);
-        setAttempts(1);
-        setSelectedQuestions([]);
+        toast.success("Tạo quiz thành công! Đang quay về trang danh sách quiz");
+        // chờ 3s sau đó chuyển hướng
+        setTimeout(() => {
+          window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(":courseId", courseId);
+        }, 3000);
       } else {
         toast.error(response.message || "Lỗi khi tạo quiz");
       }
@@ -217,6 +236,7 @@ function ManageQuizCreatePage() {
               <input
                 type="file"
                 accept=".xlsx, .xls"
+                ref={fileInputRef}
                 className="border border-gray-300 p-2 rounded-lg file:mr-4 file:py-2 file:px-4
                      file:rounded-full file:border-0
                      file:text-sm file:font-semibold
@@ -227,6 +247,10 @@ function ManageQuizCreatePage() {
             </div>
             <p className="text-sm text-gray-500 mt-2">
               Chọn file Excel chứa câu hỏi để tải lên
+            </p>
+            {/* warning */}
+            <p className="text-sm text-red-500 mt-2">
+              Sau khi tải lên, câu hỏi sẽ được cập nhập vào ngân hàng câu hỏi
             </p>
 
             {/* File mẫu */}
@@ -253,26 +277,30 @@ function ManageQuizCreatePage() {
                 onChange={(e) => setRandomCount(Number(e.target.value))}
                 className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-400 transition"
                 min={1}
-                max={questionBank.length}
               />
-              <button
-                type="button"
-                onClick={handleRandomSelect}
-                className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
-              >
-                Chọn ngẫu nhiên
-              </button>
+              <p className="text-sm text-red-500">
+                Đề sẽ được random khi sinh viên bắt đầu làm bài
+              </p>
             </div>
           </div>
         )}
 
         {/* Nút submit */}
-        <button
-          type="submit"
-          className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
-        >
-          Tạo quiz
-        </button>
+        <div className="flex space-x-4">
+          <button
+            type="button"
+            className="w-full py-3 rounded-xl text-white font-semibold bg-gray-600 transition-colors duration-500 ease-in-out hover:bg-gray-500 cursor-pointer shadow-md"
+            onClick={() => (window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(":courseId", courseId))}
+          >
+            Quay lại
+          </button>
+          <button
+            type="submit"
+            className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
+          >
+            Tạo quiz
+          </button>
+        </div>
       </form>
     </div>
   );
