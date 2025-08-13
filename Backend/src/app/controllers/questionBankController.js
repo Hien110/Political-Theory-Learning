@@ -147,12 +147,12 @@ const QuestionBankController = {
       });
 
       // Lưu vào DB
-      await QuestionBank.insertMany(questions);
+      const data = await QuestionBank.insertMany(questions);
 
       res.json({
         success: true,
         message: "Tạo câu hỏi thành công",
-        count: questions.length,
+        data,
       });
     } catch (error) {
       console.error(error);

@@ -37,6 +37,7 @@ const ManageLessonDetailPage = React.lazy(() => import("../pages/ManageLessonDet
 const ManageQuizPage = React.lazy(() => import("../pages/ManageQuizPage"));
 const ManageQuizListPage = React.lazy(() => import("../pages/ManageQuizListPage"));
 const ManageQuizCreatePage = React.lazy(() => import("../pages/ManageQuizCreatePage"));
+const ManageQuizDetailPage = React.lazy(() => import("../pages/ManageQuizDetailPage"));
 
 const ManageNewsPage = React.lazy(() => import("../pages/ManageNewsPage"));
 
@@ -79,6 +80,7 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_QUIZ, page: ManageQuizPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_QUIZ_LIST, page: ManageQuizListPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_QUIZ_CREATE, page: ManageQuizCreatePage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_QUIZ_DETAIL, page: ManageQuizDetailPage, layout: lecturerLayout },
 
   { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout },
 

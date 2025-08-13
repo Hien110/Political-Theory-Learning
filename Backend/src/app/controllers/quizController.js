@@ -1,3 +1,4 @@
+const { get } = require("mongoose");
 const { create } = require("../models/QuestionBank");
 const Quiz = require("../models/Quiz");
 
@@ -7,13 +8,13 @@ const QuizController = {
         try {
             const { courseId } = req.params;
             const quizzes = await Quiz.find({ course: courseId, deleted: false }).populate("questions.questionBankRef");
-            res.status(200).json({ data: quizzes, message: "Lấy danh sách quiz thành công" });
+            res.status(200).json({ data: quizzes, message: "Lấy danh sách bài kiểm tra thành công" });
         } catch (error) {
-            res.status(500).json({ message: "Lấy danh sách quiz thất bại" });
+            res.status(500).json({ message: "Lấy danh sách bài kiểm tra thất bại" });
         }
     },
 
-    // Tạo quizz
+    // Tạo bài kiểm tra
     createQuiz: async (req, res) => {
         try {
             const newQuiz = req.body;
@@ -24,16 +25,51 @@ const QuizController = {
                 createdBy: req.user.userId, // Assuming you have user info in req.user
             });
 
-            console.log(quiz, "quiz");
-            console.log(newQuiz, "newQuiz");
-            console.log(courseId, "courseId");
-
             await quiz.save();
-            res.status(201).json({ message: "Tạo quiz thành công", data: quiz });
+            res.status(201).json({ message: "Tạo bài kiểm tra thành công", data: quiz });
         } catch (error) {
-            res.status(500).json({ message: "Tạo quiz thất bại" });
+            res.status(500).json({ message: "Tạo bài kiểm tra thất bại" });
         }
-    }
+    },
+
+    // Xóa quiz
+    deleteQuiz: async (req, res) => {
+        try {
+            const { quizId } = req.params;
+            await Quiz.findByIdAndUpdate(quizId, { deleted: true });
+            res.status(200).json({ message: "Xóa bài kiểm tra thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Xóa bài kiểm tra thất bại" });
+        }
+    },
+
+    // Lấy quiz theo Id
+    getQuizById: async (req, res) => {
+        try {
+            const { quizId } = req.params;
+            const quiz = await Quiz.findById(quizId).populate("questions.questionBankRef");
+            if (!quiz) {
+                return res.status(404).json({ message: "Bài kiểm tra không tồn tại" });
+            }
+            res.status(200).json({ data: quiz, message: "Lấy bài kiểm tra thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Lấy bài kiểm tra thất bại" });
+        }
+    },
+
+    //Cập nhập quiz
+    updateQuiz: async (req, res) => {
+        try {
+            const { quizId } = req.params;
+            const updateData = req.body;
+
+            const updatedQuiz = await Quiz.findByIdAndUpdate(quizId, updateData, { new: true });
+            res.status(200).json({ message: "Cập nhật bài kiểm tra thành công", data: updatedQuiz });
+        } catch (error) {
+            res.status(500).json({ message: "Cập nhật bài kiểm tra thất bại" });
+        }
+    },
+
 };
 
 module.exports = QuizController;
