@@ -3,11 +3,14 @@ import React, { useEffect, useState } from "react";
 import courseService from "../services/courseService";
 import lessonService from "../services/lessonService";
 import QuizService from "../services/quizService";
+import quizResultService from "../services/quizResultService";
 
 import { Link, useParams } from "react-router-dom";
 import CourseDetailCard from "../components/CourseDetailCard";
 
 import { ROUTE_PATH } from "../constants/routePath";
+import userService from "../services/userService";
+import { toast } from "sonner";
 
 function CourseDetailPage() {
   const { courseId } = useParams();
@@ -18,6 +21,7 @@ function CourseDetailPage() {
 
   const [getAllCourses, setGetAllCourses] = useState([]);
 
+  const user = userService.getCurrentUser();
   useEffect(() => {
     // Load course chi tiết
     const fetchCourse = async () => {
@@ -54,6 +58,41 @@ function CourseDetailPage() {
       ":courseId",
       courseId
     ).replace(":lessonId", lessonId);
+  };
+
+  //xử lí vào làm bài
+  const handleQuizTest = async (quizId) => {
+    if (!user?._id) {
+      toast.error("Không tìm thấy thông tin người dùng");
+      return;
+    }
+
+    try {
+      const [existingQuizResult, quizTest] = await Promise.all([
+        quizResultService.getQuizResultsByUserIdAndQuizId(user._id, quizId),
+        QuizService.getQuizById(quizId),
+      ]);
+
+      if (!existingQuizResult?.success || !quizTest?.success) {
+        toast.error("Không thể tải dữ liệu bài quiz");
+        return;
+      }
+
+      const attempts = quizTest.data?.attempts ?? 0;
+
+      if (existingQuizResult.data?.length >= attempts) {
+        toast.error("Bạn đã hết số lượt kiểm tra bài này.");
+        return;
+      }
+
+      window.location.href = ROUTE_PATH.STUDENT_QUIZ_TEST.replace(
+        ":quizId",
+        quizId
+      );
+    } catch (error) {
+      toast.error("Lỗi khi kiểm tra bài quiz");
+      console.error(error);
+    }
   };
 
   if (!course) {
@@ -150,7 +189,7 @@ function CourseDetailPage() {
                   </div>
                   <div className="">
                     <button
-                      onClick={() => {window.location.href = ROUTE_PATH.STUDENT_QUIZ_TEST.replace(":quizId", quiz._id)}}
+                      onClick={() => handleQuizTest(quiz._id)}
                       className="cursor-pointer text-yellow-600 border border-yellow-600 px-3 py-1 text-sm rounded-lg hover:bg-yellow-600 hover:text-white font-medium transition duration-300"
                     >
                       Làm bài ngay

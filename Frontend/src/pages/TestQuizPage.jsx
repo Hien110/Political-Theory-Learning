@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import QuizService from "../services/quizService";
+import quizResultService from "../services/quizResultService";
+import userService from "../services/userService";
+import { toast } from "sonner";
 
 function TestQuizPage() {
   const { quizId } = useParams();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = userService.getCurrentUser();
   const [quiz, setQuiz] = useState(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [answers, setAnswers] = useState({});
@@ -42,7 +45,7 @@ function TestQuizPage() {
       if (diff <= 0) {
         clearInterval(timer);
         // Khi hết giờ có thể auto submit
-        console.log("Hết giờ, nộp bài tự động:", answers);
+        // console.log("Hết giờ, nộp bài tự động:", answers);
       }
     }, 500);
 
@@ -61,7 +64,7 @@ function TestQuizPage() {
             }
           : { ...prev, [questionId]: [...currentAnswers, optionIndex] };
       } else {
-        return { ...prev, [questionId]: [optionIndex] };
+        return { ...prev, [questionId]: [optionIndex] };  
       }
     });
   };
@@ -71,6 +74,66 @@ function TestQuizPage() {
     const s = seconds % 60;
     return `${m}:${s.toString().padStart(2, "0")}`;
   };
+
+  const handleSubmitQuiz = async () => {
+    if (!user?._id) {
+      console.error("Không tìm thấy thông tin người dùng");
+      return;
+    }
+
+    // tính số điểm answer
+    let mark = 10;
+    let eachMark = mark / quiz.totalQuestions;
+    let countCorrectAnswers = 0;
+    const correctAnswers = Object.entries(answers).reduce((acc, [questionId, selectedOptions]) => {
+      quiz.questions.forEach((question) => {
+        if (question.questionBankRef?._id === questionId) {
+          const correctOptions = question.questionBankRef?.options
+            .map((opt, index) => (opt.isCorrect ? index : null))
+            .filter((index) => index !== null);
+          
+          if (JSON.stringify(selectedOptions.sort()) === JSON.stringify(correctOptions.sort())) {
+            acc += eachMark;
+            countCorrectAnswers++;
+          }
+        }
+        
+      });
+
+      return acc;
+    }, 0);
+
+    console.log(correctAnswers);
+    
+    // correctAnswers;
+    const quizResult = {
+      student: user._id,
+      quiz: quizId,
+      course: quiz.course,
+      answers: Object.entries(answers).map(([questionId, selectedOptions]) => ({
+        questionBankRef: questionId,
+        selectedOptionIndex: Array.isArray(selectedOptions) ? selectedOptions : [selectedOptions],
+      })),
+      correctAnswers: countCorrectAnswers,
+      score: correctAnswers,
+    };
+
+    try{
+      const res = await quizResultService.createQuizResult(quizResult);
+      if (res.success) {
+        toast.success(res.message);
+        // Xóa endTime khỏi localStorage
+        localStorage.removeItem(`quiz-${quizId}-endTime`);
+        // Chuyển hướng hoặc thông báo thành công
+        // window.location.href = `/quiz-result/${res.data._id}`;
+      }
+    } catch (error) {
+      console.error("Lỗi khi nộp bài:", error);
+    }
+    // console.log(payload, quiz, answers, Object.entries(answers));
+    
+  
+};
 
   if (!quiz)
     return (
@@ -100,7 +163,7 @@ function TestQuizPage() {
           </h2>
           <div className="grid grid-cols-5 gap-2">
             {quiz.questions.map((q, idx) => {
-              const answered = answers[q._id]?.length > 0;
+              const answered = answers[q.questionBankRef?._id]?.length > 0;
               return (
                 <div
                   key={q._id}
@@ -141,8 +204,7 @@ function TestQuizPage() {
           <div className="mt-6">
             <button
               onClick={() => {
-                console.log("Submit:", answers);
-                localStorage.removeItem(`quiz-${quizId}-endTime`);
+                handleSubmitQuiz();
               }}
               className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
             >
@@ -189,16 +251,16 @@ function TestQuizPage() {
                         {isMultiple ? (
                           <input
                             type="checkbox"
-                            checked={answers[q._id]?.includes(i) || false}
-                            onChange={() => handleSelectOption(q._id, i, true)}
+                            // checked={answers[q.questionBankRef?._id]?.includes(i) || false}
+                            onChange={() => handleSelectOption(q.questionBankRef?._id, i, true)}
                             className="w-4 h-4 accent-blue-600 cursor-pointer"
                           />
                         ) : (
                           <input
                             type="radio"
-                            name={`question-${q._id}`}
-                            checked={answers[q._id]?.includes(i) || false}
-                            onChange={() => handleSelectOption(q._id, i, false)}
+                            name={`question-${q.questionBankRef?._id}`}
+                            // checked={answers[q.questionBankRef?._id]?.includes(i) || false}
+                            onChange={() => handleSelectOption(q.questionBankRef?._id, i, false)}
                             className="w-4 h-4 accent-blue-600 cursor-pointer"
                           />
                         )}
