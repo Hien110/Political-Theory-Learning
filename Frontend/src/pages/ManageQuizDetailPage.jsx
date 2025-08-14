@@ -53,7 +53,7 @@ function ManageQuizDetailPage() {
 
   // Lọc ra câu hỏi chưa có trong quiz
   const availableQuestions = questionBankList.filter(
-    (q) => !quizQuestions.some((quizQ) => quizQ.questionBankRef._id === q._id)
+    (q) => !quizQuestions.some((quizQ) => quizQ._id === q._id)
   );
 
   // Xóa câu hỏi
@@ -65,7 +65,7 @@ function ManageQuizDetailPage() {
   const handleAddQuestion = (q) => {
     setQuizQuestions((prev) => [
       ...prev,
-      { _id: `temp-${Date.now()}`, questionBankRef: q },
+      { _id: `temp-${Date.now()}`, ...q },
     ]);
   };
 
@@ -85,9 +85,7 @@ function ManageQuizDetailPage() {
     try {
       const payload = {
         ...quizDetail,
-        questions: quizQuestions.map((q) => ({
-          questionBankRef: q.questionBankRef._id,
-        })),
+        questions: quizQuestions,
         attempts: attempts,
         timeLimit: duration,
         totalQuestions: totalQuestions,
@@ -158,7 +156,7 @@ function ManageQuizDetailPage() {
               <p className="font-semibold text-lg text-gray-800">
                 Câu hỏi {index + 1}:{" "}
                 <span className="font-normal">
-                  {item?.questionBankRef?.question}
+                  {item?.question}
                 </span>
               </p>
               <button
@@ -169,7 +167,7 @@ function ManageQuizDetailPage() {
               </button>
             </div>
             <ul className="space-y-2 pl-5">
-              {item?.questionBankRef?.options.map((opt, idx) => (
+              {item?.options?.map((opt, idx) => (
                 <li
                   key={idx}
                   className={`flex items-center gap-2 p-2 rounded-lg ${
