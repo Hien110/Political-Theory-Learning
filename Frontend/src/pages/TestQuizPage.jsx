@@ -3,6 +3,8 @@ import { useParams } from "react-router-dom";
 import QuizService from "../services/quizService";
 import quizResultService from "../services/quizResultService";
 import userService from "../services/userService";
+import questionBankService from "../services/questionBankService";
+
 import { toast } from "sonner";
 
 function TestQuizPage() {
@@ -12,6 +14,8 @@ function TestQuizPage() {
   const [timeLeft, setTimeLeft] = useState(0);
   const [answers, setAnswers] = useState({});
   const [endTime, setEndTime] = useState(null);
+  const [questionBanks, setQuestionBanks] = useState([]);
+  const [questionQuiz, setQuestionQuiz] = useState([]);
 
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -21,7 +25,13 @@ function TestQuizPage() {
       const res = await QuizService.getQuizById(quizId);
       if (res.success) {
         setQuiz(res.data);
-
+        const questionRes = await questionBankService.getQuestionByCourse(
+          res.data.course
+        );
+        if (questionRes.success) {
+          setQuestionBanks(questionRes.data);
+        }
+        setQuestionQuiz(res.data.questions || []);
         // Kiểm tra endTime trong localStorage
         let savedEndTime = localStorage.getItem(`quiz-${quizId}-endTime`);
         if (!savedEndTime) {
@@ -32,8 +42,23 @@ function TestQuizPage() {
         setEndTime(Number(savedEndTime));
       }
     };
+
     fetchQuiz();
   }, [quizId]);
+
+  useEffect(() => {
+    if (quiz && questionBanks.length > 0 && quiz.typeQuiz === "random") {
+      const total = quiz.totalQuestions;
+
+      // Copy mảng questionBanks để tránh thay đổi dữ liệu gốc
+      const shuffled = [...questionBanks].sort(() => 0.5 - Math.random());
+
+      // Lấy ra đúng số câu hỏi cần
+      const randomQuestions = shuffled.slice(0, total);
+      console.log(randomQuestions);
+      setQuestionQuiz(randomQuestions);
+    }
+  }, [quiz, questionBanks]);
 
   // Đếm ngược thời gian
   useEffect(() => {
@@ -64,7 +89,7 @@ function TestQuizPage() {
             }
           : { ...prev, [questionId]: [...currentAnswers, optionIndex] };
       } else {
-        return { ...prev, [questionId]: [optionIndex] };  
+        return { ...prev, [questionId]: [optionIndex] };
       }
     });
   };
@@ -76,6 +101,9 @@ function TestQuizPage() {
   };
 
   const handleSubmitQuiz = async () => {
+    if (!confirm("Bạn có chắc muốn nộp bài không?")) {
+    return; // Nếu chọn Cancel thì dừng luôn
+  }
     if (!user?._id) {
       console.error("Không tìm thấy thông tin người dùng");
       return;
@@ -85,26 +113,29 @@ function TestQuizPage() {
     let mark = 10;
     let eachMark = mark / quiz.totalQuestions;
     let countCorrectAnswers = 0;
-    const correctAnswers = Object.entries(answers).reduce((acc, [questionId, selectedOptions]) => {
-      quiz.questions.forEach((question) => {
-        if (question.questionBankRef?._id === questionId) {
-          const correctOptions = question.questionBankRef?.options
-            .map((opt, index) => (opt.isCorrect ? index : null))
-            .filter((index) => index !== null);
-          
-          if (JSON.stringify(selectedOptions.sort()) === JSON.stringify(correctOptions.sort())) {
-            acc += eachMark;
-            countCorrectAnswers++;
+    const correctAnswers = Object.entries(answers).reduce(
+      (acc, [questionId, selectedOptions]) => {
+        questionQuiz.forEach((question) => {
+          if (question?._id === questionId) {
+            const correctOptions = question?.options
+              .map((opt, index) => (opt.isCorrect ? index : null))
+              .filter((index) => index !== null);
+
+            if (
+              JSON.stringify(selectedOptions.sort()) ===
+              JSON.stringify(correctOptions.sort())
+            ) {
+              acc += eachMark;
+              countCorrectAnswers++;
+            }
           }
-        }
-        
-      });
+        });
 
-      return acc;
-    }, 0);
+        return acc;
+      },
+      0
+    );
 
-    console.log(correctAnswers);
-    
     // correctAnswers;
     const quizResult = {
       student: user._id,
@@ -112,13 +143,15 @@ function TestQuizPage() {
       course: quiz.course,
       answers: Object.entries(answers).map(([questionId, selectedOptions]) => ({
         questionBankRef: questionId,
-        selectedOptionIndex: Array.isArray(selectedOptions) ? selectedOptions : [selectedOptions],
+        selectedOptionIndex: Array.isArray(selectedOptions)
+          ? selectedOptions
+          : [selectedOptions],
       })),
       correctAnswers: countCorrectAnswers,
       score: correctAnswers,
     };
 
-    try{
+    try {
       const res = await quizResultService.createQuizResult(quizResult);
       if (res.success) {
         toast.success(res.message);
@@ -131,9 +164,7 @@ function TestQuizPage() {
       console.error("Lỗi khi nộp bài:", error);
     }
     // console.log(payload, quiz, answers, Object.entries(answers));
-    
-  
-};
+  };
 
   if (!quiz)
     return (
@@ -162,8 +193,8 @@ function TestQuizPage() {
             Danh sách câu hỏi
           </h2>
           <div className="grid grid-cols-5 gap-2">
-            {quiz.questions.map((q, idx) => {
-              const answered = answers[q.questionBankRef?._id]?.length > 0;
+            {questionQuiz.map((q, idx) => {
+              const answered = answers[q?._id]?.length > 0;
               return (
                 <div
                   key={q._id}
@@ -197,7 +228,7 @@ function TestQuizPage() {
             <span className="font-medium text-blue-600">
               {Object.keys(answers).length}
             </span>
-            /{quiz.questions.length}
+            /{quiz.totalQuestions} câu
           </div>
 
           {/* Nút nộp bài */}
@@ -221,13 +252,12 @@ function TestQuizPage() {
           <h1 className="text-2xl font-bold text-yellow-600 max-w-2xl">
             {quiz.title}
           </h1>
-
         </div>
 
         {/* Danh sách câu hỏi */}
         <div className="space-y-6">
-          {quiz.questions.map((q, idx) => {
-            const opts = q.questionBankRef?.options || [];
+          {questionQuiz.map((q, idx) => {
+            const opts = q?.options || [];
             const correctCount = opts.filter((o) => o.isCorrect).length;
             const isMultiple = correctCount > 1;
 
@@ -238,7 +268,7 @@ function TestQuizPage() {
                 className="bg-white border border-gray-200 rounded-lg p-5 shadow hover:shadow-md transition-all duration-200"
               >
                 <p className="font-semibold text-lg text-gray-800 mb-4">
-                  Câu {idx + 1}: {q.questionBankRef?.question}
+                  Câu {idx + 1}: {q?.question}
                 </p>
 
                 <ul className="space-y-3">
@@ -252,15 +282,27 @@ function TestQuizPage() {
                           <input
                             type="checkbox"
                             // checked={answers[q.questionBankRef?._id]?.includes(i) || false}
-                            onChange={() => handleSelectOption(q.questionBankRef?._id, i, true)}
+                            onChange={() =>
+                              handleSelectOption(
+                                q?._id,
+                                i,
+                                true
+                              )
+                            }
                             className="w-4 h-4 accent-blue-600 cursor-pointer"
                           />
                         ) : (
                           <input
                             type="radio"
-                            name={`question-${q.questionBankRef?._id}`}
+                            name={`question-${q?._id}`}
                             // checked={answers[q.questionBankRef?._id]?.includes(i) || false}
-                            onChange={() => handleSelectOption(q.questionBankRef?._id, i, false)}
+                            onChange={() =>
+                              handleSelectOption(
+                                q?._id,
+                                i,
+                                false
+                              )
+                            }
                             className="w-4 h-4 accent-blue-600 cursor-pointer"
                           />
                         )}

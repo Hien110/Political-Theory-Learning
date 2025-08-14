@@ -18,7 +18,7 @@ const QuizResultController = {
   getByUserIdAndQuizId: async (req, res) => {
     try {
       const { userId, quizId } = req.params;
-      const quizResults = await QuizResult.find({ userId, quizId });
+      const quizResults = await QuizResult.find({ student: userId, quiz: quizId });
       
       if (!quizResults || quizResults.length === 0) {
         return res

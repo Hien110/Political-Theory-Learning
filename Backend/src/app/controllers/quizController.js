@@ -19,6 +19,8 @@ const QuizController = {
         try {
             const newQuiz = req.body;
             const courseId = req.params.courseId;
+            console.log(newQuiz);
+            
             const quiz = new Quiz({
                 ...newQuiz,
                 course: courseId,
@@ -47,7 +49,7 @@ const QuizController = {
     getQuizById: async (req, res) => {
         try {
             const { quizId } = req.params;
-            const quiz = await Quiz.findById(quizId).populate("questions.questionBankRef");
+            const quiz = await Quiz.findById(quizId).populate("questions");
             if (!quiz) {
                 return res.status(404).json({ message: "Bài kiểm tra không tồn tại" });
             }

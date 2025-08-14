@@ -77,10 +77,8 @@ function CourseDetailPage() {
         toast.error("Không thể tải dữ liệu bài quiz");
         return;
       }
-
-      const attempts = quizTest.data?.attempts ?? 0;
-
-      if (existingQuizResult.data?.length >= attempts) {
+      
+      if (existingQuizResult.data?.length >= quizTest.data?.attempts) {
         toast.error("Bạn đã hết số lượt kiểm tra bài này.");
         return;
       }

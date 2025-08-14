@@ -26,13 +26,6 @@ function ManageQuizCreatePage() {
   let totalQuestions = 0;
   const fileInputRef = useRef();
 
-  const resetFile = () => {
-    setFile(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = null; // reset input HTML
-    }
-  };
-
   // Lấy danh sách lessons & question bank khi chọn course
   useEffect(() => {
     if (courseId) {
@@ -111,7 +104,7 @@ function ManageQuizCreatePage() {
     const newQuiz = {
       course: courseId,
       title,
-      questions: ids.map((qId) => ({ questionBankRef: qId })),
+      questions: ids,
       timeLimit,
       totalQuestions,
       attempts,
