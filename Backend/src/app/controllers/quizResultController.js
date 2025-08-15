@@ -18,8 +18,11 @@ const QuizResultController = {
   getByUserIdAndQuizId: async (req, res) => {
     try {
       const { userId, quizId } = req.params;
-      const quizResults = await QuizResult.find({ student: userId, quiz: quizId });
-      
+      const quizResults = await QuizResult.find({
+        student: userId,
+        quiz: quizId,
+      });
+
       if (!quizResults || quizResults.length === 0) {
         return res
           .status(200)
@@ -33,6 +36,26 @@ const QuizResultController = {
     }
   },
 
+  // Lấy quiz result theo Id
+  getQuizResultById: async (req, res) => {
+    try {
+      const { quizResultId } = req.params;
+      const quizResult = await QuizResult.findById(quizResultId).populate("student quiz course answers.questionBankRef");
+      if (!quizResult) {
+        return res.status(404).json({ message: "Không tìm thấy bài kiểm tra" });
+      }
+
+      res
+        .status(200)
+        .json({
+          data: quizResult,
+          message: "Lấy kết quả bài kiểm tra thành công",
+        });
+    } catch (error) {
+      res.status(500).json({ message: "Lấy kết quả bài kiểm tra thất bại" });
+    }
+  },
+
   //Lấy quiz theo course
   getQuizResultsByCourse: async (req, res) => {
     try {
@@ -43,12 +66,10 @@ const QuizResultController = {
           .status(404)
           .json({ message: "Không tìm thấy kết quả quiz cho khóa học này" });
       }
-      res
-        .status(200)
-        .json({
-          data: quizResults,
-          message: "Lấy kết quả quiz theo khóa học thành công",
-        });
+      res.status(200).json({
+        data: quizResults,
+        message: "Lấy kết quả quiz theo khóa học thành công",
+      });
     } catch (error) {
       res
         .status(500)

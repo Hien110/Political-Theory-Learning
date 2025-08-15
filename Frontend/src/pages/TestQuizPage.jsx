@@ -7,7 +7,25 @@ import questionBankService from "../services/questionBankService";
 
 import { toast } from "sonner";
 
+import { ROUTE_PATH } from "../constants/routePath";
+
 function TestQuizPage() {
+  (function () {
+    // Chặn chuột phải
+    document.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    // Chặn các phím tắt
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "F12") e.preventDefault();
+      if (
+        (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key)) ||
+        (e.ctrlKey && e.key === "u", "a")
+      ) {
+        e.preventDefault();
+      }
+    });
+  })();
+
   const { quizId } = useParams();
   const user = userService.getCurrentUser();
   const [quiz, setQuiz] = useState(null);
@@ -16,35 +34,59 @@ function TestQuizPage() {
   const [endTime, setEndTime] = useState(null);
   const [questionBanks, setQuestionBanks] = useState([]);
   const [questionQuiz, setQuestionQuiz] = useState([]);
+  const [checkExistingQuizResult, setCheckExistinigQuizResult] =
+    useState(false);
 
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   // Lấy dữ liệu quiz và endTime từ localStorage
   useEffect(() => {
-    const fetchQuiz = async () => {
-      const res = await QuizService.getQuizById(quizId);
-      if (res.success) {
-        setQuiz(res.data);
+    const initQuiz = async () => {
+      try {
+        // 1. Lấy thông tin quiz
+        const quizRes = await QuizService.getQuizById(quizId);
+        if (!quizRes.success) return;
+
+        const quizData = quizRes.data;
+        setQuiz(quizData);
+
+        // 2. Lấy danh sách câu hỏi ngân hàng theo course
         const questionRes = await questionBankService.getQuestionByCourse(
-          res.data.course
+          quizData.course
         );
         if (questionRes.success) {
           setQuestionBanks(questionRes.data);
         }
-        setQuestionQuiz(res.data.questions || []);
-        // Kiểm tra endTime trong localStorage
+
+        // 3. Lấy danh sách câu hỏi của quiz
+        setQuestionQuiz(quizData.questions || []);
+
+        // 4. Xử lý thời gian endTime
         let savedEndTime = localStorage.getItem(`quiz-${quizId}-endTime`);
         if (!savedEndTime) {
-          // Lần đầu làm bài → tính endTime mới
-          savedEndTime = Date.now() + (res.data.timeLimit || 0) * 60 * 1000;
+          savedEndTime = Date.now() + (quizData.timeLimit || 0) * 60 * 1000;
           localStorage.setItem(`quiz-${quizId}-endTime`, savedEndTime);
         }
         setEndTime(Number(savedEndTime));
+
+        // 5. Kiểm tra số lần làm bài (checkExistingQuizResult)
+        const existingQuizResult =
+          await quizResultService.getQuizResultsByUserIdAndQuizId(
+            user._id,
+            quizData._id
+          );
+        if (existingQuizResult.success) {
+          if (existingQuizResult.data.length >= quizData.attempts) {
+            setCheckExistinigQuizResult(true);
+          }
+        }
+      } catch (error) {
+        console.error("Lỗi khi khởi tạo quiz:", error);
       }
     };
 
-    fetchQuiz();
-  }, [quizId]);
+    initQuiz();
+  }, [quizId, user._id]);
 
   useEffect(() => {
     if (quiz && questionBanks.length > 0 && quiz.typeQuiz === "random") {
@@ -69,8 +111,7 @@ function TestQuizPage() {
       setTimeLeft(diff);
       if (diff <= 0) {
         clearInterval(timer);
-        // Khi hết giờ có thể auto submit
-        // console.log("Hết giờ, nộp bài tự động:", answers);
+        handleSubmitQuiz();
       }
     }, 500);
 
@@ -101,11 +142,22 @@ function TestQuizPage() {
   };
 
   const handleSubmitQuiz = async () => {
-    if (!confirm("Bạn có chắc muốn nộp bài không?")) {
-    return; // Nếu chọn Cancel thì dừng luôn
-  }
     if (!user?._id) {
       console.error("Không tìm thấy thông tin người dùng");
+      return;
+    }
+
+    if (checkExistingQuizResult) {
+      toast.error("Bạn đã vượt quá số lần làm bài");
+      //set thời gian 3s sau đó  mới chuyển trang
+      localStorage.removeItem(`quiz-${quizId}-endTime`);
+
+      setTimeout(() => {
+        window.location.href = ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+          ":courseId",
+          quiz.course
+        );
+      }, 2000);
       return;
     }
 
@@ -158,7 +210,10 @@ function TestQuizPage() {
         // Xóa endTime khỏi localStorage
         localStorage.removeItem(`quiz-${quizId}-endTime`);
         // Chuyển hướng hoặc thông báo thành công
-        // window.location.href = `/quiz-result/${res.data._id}`;
+        window.location.href = ROUTE_PATH.STUDENT_QUIZ_RESULT.replace(
+          ":quizResultId",
+          res.data._id
+        );
       }
     } catch (error) {
       console.error("Lỗi khi nộp bài:", error);
@@ -235,6 +290,7 @@ function TestQuizPage() {
           <div className="mt-6">
             <button
               onClick={() => {
+                if (!confirm("Bạn có chắc muốn nộp bài không?")) return;
                 handleSubmitQuiz();
               }}
               className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
@@ -282,13 +338,7 @@ function TestQuizPage() {
                           <input
                             type="checkbox"
                             // checked={answers[q.questionBankRef?._id]?.includes(i) || false}
-                            onChange={() =>
-                              handleSelectOption(
-                                q?._id,
-                                i,
-                                true
-                              )
-                            }
+                            onChange={() => handleSelectOption(q?._id, i, true)}
                             className="w-4 h-4 accent-blue-600 cursor-pointer"
                           />
                         ) : (
@@ -297,11 +347,7 @@ function TestQuizPage() {
                             name={`question-${q?._id}`}
                             // checked={answers[q.questionBankRef?._id]?.includes(i) || false}
                             onChange={() =>
-                              handleSelectOption(
-                                q?._id,
-                                i,
-                                false
-                              )
+                              handleSelectOption(q?._id, i, false)
                             }
                             className="w-4 h-4 accent-blue-600 cursor-pointer"
                           />
