@@ -14,6 +14,9 @@ router.get('/quizReult/:quizResultId', authenticateToken, quizResultController.g
 // Lấy kết quả quizResult theo khóa học
 router.get('/course/:courseId', authenticateToken, authorize('student'), quizResultController.getQuizResultsByCourse);
 
+// Lấy kết quả theo userId
+router.get('/user/getAllResult', authenticateToken, authorize('student'), quizResultController.getQuizResultsByUserId);
+
 // Lấy nhiều quizResult theo userId và quizId
 router.get('/:userId/:quizId', authenticateToken, authorize('student'), quizResultController.getByUserIdAndQuizId);
 

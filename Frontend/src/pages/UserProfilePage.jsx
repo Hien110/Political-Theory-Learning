@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { uploadToCloudinary } from "../services/uploadCloudinary";
 import userService from "../services/userService";
+import quizResultService from "../services/quizResultService";
 
 import { useLocation } from "react-router-dom";
 
@@ -20,6 +21,9 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import SchoolOutlinedIcon from "@mui/icons-material/SchoolOutlined";
+import QuizHistoryItem from "../components/QuizHistoryItem";
+import AverageScoreCard from "../components/AverageScoreCard";
+import ResultClassification from "../components/ResultClassification";
 
 const UserProfile = () => {
   const location = useLocation();
@@ -43,6 +47,9 @@ const UserProfile = () => {
   const [checkMatch, setCheckMatch] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  //kết quả kiểm tra
+  const [quizResults, setQuizResults] = useState([]);
+
   useEffect(() => {
     // Kiểm tra độ dài mật khẩu mới
     if (newPassword.length >= 6 && newPassword.length <= 20) {
@@ -58,6 +65,15 @@ const UserProfile = () => {
     }
   }, [newPassword, confirmPassword]);
 
+  useEffect(() => {
+    const fetchQuizResults = async () => {
+      const response = await quizResultService.getQuizResultsByUserId();
+      if (response.success) {
+        setQuizResults(response.data);
+      }
+    };
+    fetchQuizResults();
+  }, []);
   // Handler submit form cập nhật thông tin người dùng
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -126,9 +142,9 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className=" bg-gray-50 py-10 px-10 flex space-x-10">
+      <div className=" bg-gray-50 py-10 px-10 flex space-x-5">
         <div className="w-1/3  min-h-[400px]">
-          <div className="border border-gray-300 rounded-lg shadow-lg p-6 bg-white">
+          <div className="border border-gray-300 rounded-lg shadow-sm p-6 bg-white">
             <div className="flex flex-col items-center space-y-4">
               <img
                 src={previewAvatar}
@@ -155,7 +171,7 @@ const UserProfile = () => {
               </div>
             </div>
           </div>
-          <div className="border border-gray-300 rounded-lg shadow-lg p-6 bg-white mt-6">
+          <div className="border border-gray-300 rounded-lg shadow-sm p-6 bg-white mt-6">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Thông tin cá nhân
             </h3>
@@ -204,8 +220,25 @@ const UserProfile = () => {
               </li>
             </ul>
           </div>
+
+          {/* Điểm trung bình */}
+          <AverageScoreCard quizResults={quizResults} />
         </div>
-        <div className="w-2/3 border min-h-[400px] border border-gray-300 rounded-lg shadow-lg bg-white"></div>
+        <div className="w-2/3  min-h-[400px]">
+          <div className=" border p-4 border border-gray-300 rounded-lg shadow-sm bg-white max-h-[650px] flex flex-col">
+            <h2 className="text-xl font-bold border-b border-gray-300 pb-3 mb-3">
+              Lịch sử làm bài
+            </h2>
+
+            {/* Danh sách quiz results có scroll riêng */}
+            <div className="flex-1 overflow-y-auto pr-2">
+              {quizResults.map((item) => (
+                <QuizHistoryItem key={item._id} history={item} />
+              ))}
+            </div>
+          </div>
+            <ResultClassification quizResults={quizResults} />
+        </div>
       </div>
 
       {/* Modal cập nhật hồ sơ */}
