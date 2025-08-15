@@ -47,6 +47,7 @@ const CourseDetailPage = React.lazy(() => import("../pages/CourseDetailPage"));
 const LessonDetailPage = React.lazy(() => import("../pages/LessonDetailPage"));
 
 const TestQuizPage = React.lazy(() => import("../pages/TestQuizPage"));
+const TestQuizResultPage = React.lazy(() => import("../pages/TestQuizResultPage"));
 
 const AppRoutes = [
 
@@ -91,7 +92,8 @@ const AppRoutes = [
 
   { path: ROUTE_PATH.STUDENT_LESSON_DETAIL, page: LessonDetailPage, layout: studentLayout },
 
-  { path: ROUTE_PATH.STUDENT_QUIZ_TEST, page: TestQuizPage,  },
+  { path: ROUTE_PATH.STUDENT_QUIZ_TEST, page: TestQuizPage },
+  { path: ROUTE_PATH.STUDENT_QUIZ_RESULT, page: TestQuizResultPage, layout: studentLayout }
 ];
 
 export default AppRoutes;
