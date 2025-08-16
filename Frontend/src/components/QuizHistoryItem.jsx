@@ -2,11 +2,19 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import SchoolIcon from "@mui/icons-material/School";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+
 import { useEffect, useState } from "react";
+
 import { Link } from "react-router-dom";
+
+import { ROUTE_PATH } from "../constants/routePath";
+
+import userService from "../services/userService";
 
 export default function QuizHistoryCard({ history }) {
   const [progress, setProgress] = useState(0);
+
+  const user = userService.getCurrentUser();
 
   const score = history.score || 0;
   const percent = (score / 10) * 100;
@@ -45,9 +53,7 @@ export default function QuizHistoryCard({ history }) {
         <p className="mt-2 text-sm flex items-center gap-1">
           <CheckCircleIcon fontSize="small" className="text-gray-500" />{" "}
           <span className="font-semibold text-gray-500">Điểm:</span>{" "}
-          <span className={`font-bold ${getTextColor()}`}>
-            {score}/10
-          </span>
+          <span className={`font-bold ${getTextColor()}`}>{score}/10</span>
         </p>
 
         {/* Thanh progress */}
@@ -65,13 +71,33 @@ export default function QuizHistoryCard({ history }) {
       </div>
 
       {/* Nút xem chi tiết */}
-      <Link
-        to={`/quiz-result/${history._id}`}
-        className="flex items-center text-sm gap-2 px-2 py-2 border border-yellow-500 text-yellow-600 rounded-lg font-medium hover:bg-yellow-500 hover:text-white transition-colors duration-300"
-      >
-        Xem chi tiết
-        <ArrowForwardIcon fontSize="small" />
-      </Link>
+      {user.role === "student" ? (
+        <Link
+          //truyền thêm một state
+          to={ROUTE_PATH.STUDENT_QUIZ_RESULT.replace(
+            ":quizResultId",
+            history?._id
+          )}
+          state={{ linkFrom: "quizHistory" }}
+          className="flex items-center text-sm gap-2 px-2 py-2 border border-yellow-500 text-yellow-600 rounded-lg font-medium hover:bg-yellow-500 hover:text-white transition-colors duration-300"
+        >
+          Xem chi tiết
+          <ArrowForwardIcon fontSize="small" />
+        </Link>
+      ) : (
+        <Link
+          //truyền thêm một state
+          to={ROUTE_PATH.STUDENT_QUIZ_RESULT.replace(
+            ":quizResultId",
+            history?._id
+          )}
+          state={{ linkFrom: "quizHistoryLecture" }}
+          className="flex items-center text-sm gap-2 px-2 py-2 border border-yellow-500 text-yellow-600 rounded-lg font-medium hover:bg-yellow-500 hover:text-white transition-colors duration-300"
+        >
+          Xem chi tiết
+          <ArrowForwardIcon fontSize="small" />
+        </Link>
+      )}
     </div>
   );
 }

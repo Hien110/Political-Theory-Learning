@@ -20,7 +20,9 @@ const UserProfilePage = React.lazy(() => import("../pages/UserProfilePage"));
 
 // lecturer pages
 const StatisticsPage = React.lazy(() => import("../pages/StatisticsPage"));
+
 const ManageStudentPage = React.lazy(() => import("../pages/ManageStudentPage"));
+const ManageStudentDetailPage = React.lazy(() => import("../pages/ManageStudentDetailPage"));
 
 // Question Bank
 const ManageQuestionBankPage = React.lazy(() => import("../pages/ManageQuestionBankPage"));
@@ -63,6 +65,7 @@ const AppRoutes = [
 
   // User management routes
   { path: ROUTE_PATH.USER_PROFILE, page: UserProfilePage, layout: studentLayout },
+  { path: ROUTE_PATH.LECTURER_STUDENT_DETAIL, page: ManageStudentDetailPage, layout: lecturerLayout },
 
   // lecturer routes
   { path: ROUTE_PATH.LECTURER_STATISTICS, page: StatisticsPage, layout: lecturerLayout },

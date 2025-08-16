@@ -1,7 +1,9 @@
 export default function AverageScoreCard({ quizResults }) {
+  console.log(quizResults);
+  
   if (!quizResults || quizResults.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm p-5 border border-gray-200 text-center">
+      <div className="bg-white rounded-xl shadow-sm p-5 border border-gray-200 text-center mt-3">
         <p className="text-gray-500">Chưa có dữ liệu</p>
       </div>
     );

@@ -1,15 +1,26 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import quizResultService from "../services/quizResultService";
 import { ROUTE_PATH } from "../constants/routePath";
 
-import { CheckCircle, XCircle, User, Book, FileText, Clock, Award } from "lucide-react";
-
+import {
+  CheckCircle,
+  XCircle,
+  User,
+  Book,
+  FileText,
+  Clock,
+  Award,
+} from "lucide-react";
 
 function TestQuizResultPage() {
   const { quizResultId } = useParams();
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const location = useLocation();
+
+  const { linkFrom } = location.state || {};
 
   useEffect(() => {
     const fetchResult = async () => {
@@ -33,7 +44,9 @@ function TestQuizResultPage() {
   }
 
   if (!result) {
-    return <div className="p-6 text-center text-red-500">Không tìm thấy kết quả</div>;
+    return (
+      <div className="p-6 text-center text-red-500">Không tìm thấy kết quả</div>
+    );
   }
 
   return (
@@ -45,15 +58,40 @@ function TestQuizResultPage() {
 
       {/* Thông tin chung */}
       <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <InfoItem icon={<User className="text-blue-500" />} label="Sinh viên" value={result.student?.name} />
-        <InfoItem icon={<Book className="text-purple-500" />} label="Khóa học" value={result.course?.title} />
-        <InfoItem icon={<FileText className="text-green-500" />} label="Bài kiểm tra" value={result.quiz?.title} />
-        <InfoItem icon={<Award className="text-yellow-500" />} label="Điểm số" 
-          value={<span className="text-green-600 font-bold">{result.score?.toFixed(2)}</span>} />
-        <InfoItem icon={<CheckCircle className="text-green-500" />} label="Số câu đúng" 
-          value={`${result.correctAnswers}/${result.quiz?.totalQuestions}`} />
-        <InfoItem icon={<Clock className="text-gray-500" />} label="Thời gian nộp" 
-          value={new Date(result.createdAt).toLocaleString("vi-VN")} />
+        <InfoItem
+          icon={<User className="text-blue-500" />}
+          label="Sinh viên"
+          value={result.student?.name}
+        />
+        <InfoItem
+          icon={<Book className="text-purple-500" />}
+          label="Khóa học"
+          value={result.course?.title}
+        />
+        <InfoItem
+          icon={<FileText className="text-green-500" />}
+          label="Bài kiểm tra"
+          value={result.quiz?.title}
+        />
+        <InfoItem
+          icon={<Award className="text-yellow-500" />}
+          label="Điểm số"
+          value={
+            <span className="text-green-600 font-bold">
+              {result.score?.toFixed(2)}
+            </span>
+          }
+        />
+        <InfoItem
+          icon={<CheckCircle className="text-green-500" />}
+          label="Số câu đúng"
+          value={`${result.correctAnswers}/${result.quiz?.totalQuestions}`}
+        />
+        <InfoItem
+          icon={<Clock className="text-gray-500" />}
+          label="Thời gian nộp"
+          value={new Date(result.createdAt).toLocaleString("vi-VN")}
+        />
       </div>
 
       {/* Danh sách câu hỏi */}
@@ -61,7 +99,10 @@ function TestQuizResultPage() {
         {result.answers?.map((ans, idx) => {
           const question = ans.questionBankRef;
           return (
-            <div key={idx} className="border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow">
+            <div
+              key={idx}
+              className="border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow"
+            >
               <p className="font-semibold mb-3 text-lg">
                 Câu {idx + 1}: {question?.question}
               </p>
@@ -71,19 +112,33 @@ function TestQuizResultPage() {
                   const isCorrect = opt.isCorrect;
 
                   let bgColor = "bg-gray-50";
-                  if (isCorrect) bgColor = "bg-green-100 border border-green-300";
-                  else if (isSelected && !isCorrect) bgColor = "bg-red-100 border border-red-300";
+                  if (isCorrect)
+                    bgColor = "bg-green-100 border border-green-300";
+                  else if (isSelected && !isCorrect)
+                    bgColor = "bg-red-100 border border-red-300";
 
                   return (
                     <div
                       key={optIdx}
                       className={`p-3 rounded-lg flex items-center gap-2 ${bgColor}`}
                     >
-                      {isCorrect && <CheckCircle className="text-green-600 w-5 h-5" />}
-                      {isSelected && !isCorrect && <XCircle className="text-red-600 w-5 h-5" />}
+                      {isCorrect && (
+                        <CheckCircle className="text-green-600 w-5 h-5" />
+                      )}
+                      {isSelected && !isCorrect && (
+                        <XCircle className="text-red-600 w-5 h-5" />
+                      )}
                       <span>{opt.text}</span>
-                      {isCorrect && <span className="ml-2 text-green-700 font-semibold">(Đúng)</span>}
-                      {isSelected && !isCorrect && <span className="ml-2 text-red-700 font-semibold">(Bạn chọn)</span>}
+                      {isCorrect && (
+                        <span className="ml-2 text-green-700 font-semibold">
+                          (Đúng)
+                        </span>
+                      )}
+                      {isSelected && !isCorrect && (
+                        <span className="ml-2 text-red-700 font-semibold">
+                          (Bạn chọn)
+                        </span>
+                      )}
                     </div>
                   );
                 })}
@@ -95,12 +150,28 @@ function TestQuizResultPage() {
 
       {/* Nút quay lại */}
       <div className="mt-10 text-center">
-        <Link
-          to={ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(":courseId", result.course._id)}
-          className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
-        >
-          ⬅ Quay lại khóa học
-        </Link>
+        {linkFrom === "quizHistory" ? (
+          <Link
+            to={ROUTE_PATH.USER_PROFILE}
+            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
+          >
+            ⬅ Quay lại trang cá nhân
+          </Link>
+        ) : linkFrom === "quizPage" ? (
+          <Link
+            to={ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(":courseId", result.course?._id)}
+            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
+          >
+            ⬅ Quay lại bài học
+          </Link>
+        ) : (
+          <Link
+            to={ROUTE_PATH.LECTURER_STUDENT_DETAIL.replace(":studentId", result.student?._id)}
+            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
+          >
+            ⬅ Quay lại
+          </Link>
+        )}
       </div>
     </div>
   );

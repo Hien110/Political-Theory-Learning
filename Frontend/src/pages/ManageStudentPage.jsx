@@ -4,6 +4,8 @@ import { Dialog, DialogTitle, DialogContent, Avatar } from "@mui/material";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
+import { ROUTE_PATH } from "../constants/routePath";
 
 function ManageStudentPage() {
   const [allStudents, setAllStudents] = useState([]);
@@ -105,7 +107,7 @@ function ManageStudentPage() {
                       setShowLockModal(true);
                       setSelectedStudent(student);
                     }}
-                    className={`cursor-pointer px-4 py-1.5 rounded-lg text-white font-medium shadow-sm transition-all ${
+                    className={`inline-flex items-center justify-center cursor-pointer px-4 py-1.5 rounded-lg text-white font-medium shadow-sm transition-all ${
                       student.status === "locked"
                         ? "bg-green-600 hover:bg-green-700"
                         : "bg-red-600 hover:bg-red-700"
@@ -113,9 +115,12 @@ function ManageStudentPage() {
                   >
                     {student.status === "locked" ? "Mở khóa" : "Khóa"}
                   </button>
-                  <button className="cursor-pointer px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-all">
+                  <Link
+                    to={ROUTE_PATH.LECTURER_STUDENT_DETAIL.replace(":studentId", student._id)}
+                    className="inline-flex items-center justify-center cursor-pointer px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium shadow-sm transition-all"
+                  >
                     Xem
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}

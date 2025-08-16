@@ -23,5 +23,7 @@ router.put("/change-password", authenticateToken, UserController.changePassword)
 router.get("/students", authenticateToken, authorize("lecturer"), UserController.getAllStudents);
 // Khóa hoặc hủy tài khoản student
 router.put("/students/lock", authenticateToken, authorize("lecturer"), UserController.toggleStudentLock);
+// Lấy thông tin student theo ID
+router.get("/students/:id", authenticateToken, authorize("lecturer"), UserController.getUserById);
 
 module.exports = router;

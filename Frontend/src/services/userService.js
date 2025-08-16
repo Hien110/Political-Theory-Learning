@@ -218,6 +218,26 @@ const userService = {
       };
     }
   },
+
+  // Lấy thông tin người dùng theo userId
+  getUserById: async (userId) => {
+    try {
+      const response = await axios.get(`${API_URL}/students/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${userService.getToken()}`,
+        },
+      });
+      return { success: true, data: response.data.data };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error?.response?.data?.message ||
+          "Lấy thông tin người dùng thất bại. Vui lòng thử lại.",
+      };
+    }
+  },
+
 };
 
 export default userService;
