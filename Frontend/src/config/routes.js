@@ -14,6 +14,9 @@ const AuthCallbackPage = React.lazy(() => import("../pages/AuthCallbackPage"));
 
 // Site pages
 const HomePage = React.lazy(() => import("../pages/HomePage"));
+const CoursePage = React.lazy(() => import("../pages/CoursePage"));
+const TestQuizListPage = React.lazy(() => import("../pages/TestQuizListPage"));
+const NewsPage = React.lazy(() => import("../pages/NewsPage"));
 
 // user management pages
 const UserProfilePage = React.lazy(() => import("../pages/UserProfilePage"));
@@ -62,6 +65,9 @@ const AppRoutes = [
 
   // Site routes
   { path: ROUTE_PATH.HOME, page: HomePage, layout: studentLayout },
+  { path: ROUTE_PATH.COURSE, page: CoursePage, layout: studentLayout },
+  { path: ROUTE_PATH.TEST_QUIZ_LIST, page: TestQuizListPage, layout: studentLayout },
+  { path: ROUTE_PATH.NEWS, page: NewsPage, layout: studentLayout },
 
   // User management routes
   { path: ROUTE_PATH.USER_PROFILE, page: UserProfilePage, layout: studentLayout },

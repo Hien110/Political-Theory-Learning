@@ -5,6 +5,8 @@ import userService from "./userService";
 const API_URL = "/api/quizzes";
 
 const QuizService = {
+
+  // Lấy danh sách quiz theo khóa học
   getQuizzesByCourse: async (courseId) => {
     try {
       const response = await axios.get(`${API_URL}/${courseId}/quizzes`);
@@ -19,6 +21,7 @@ const QuizService = {
     }
   },
 
+  // Tạo bài kiểm tra
   createQuiz: async (courseId, newQuiz) => {
 
     try {
@@ -113,6 +116,24 @@ const QuizService = {
         success: false,
         message:
           error.response?.data?.message || "Lỗi khi cập nhật bài kiểm tra",
+      };
+    }
+  },
+
+  // Lấy tất cả các quiz
+  getAllQuizzes: async () => {
+    try {
+      const response = await axios.get(`${API_URL}/all-quiz`);
+      return {
+        success: true,
+        data: response.data.data,
+        message: response.data.message || "Lấy tất cả bài kiểm tra thành công",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.message || "Lỗi khi lấy tất cả bài kiểm tra",
       };
     }
   },

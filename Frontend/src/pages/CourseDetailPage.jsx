@@ -5,7 +5,7 @@ import lessonService from "../services/lessonService";
 import QuizService from "../services/quizService";
 import quizResultService from "../services/quizResultService";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import CourseDetailCard from "../components/CourseDetailCard";
 
 import { ROUTE_PATH } from "../constants/routePath";
@@ -22,6 +22,8 @@ function CourseDetailPage() {
   const [getAllCourses, setGetAllCourses] = useState([]);
 
   const user = userService.getCurrentUser();
+
+  const navigate = useNavigate();
   useEffect(() => {
     // Load course chi tiết
     const fetchCourse = async () => {
@@ -64,6 +66,7 @@ function CourseDetailPage() {
   const handleQuizTest = async (quizId) => {
     if (!user?._id) {
       toast.error("Không tìm thấy thông tin người dùng");
+      navigate(ROUTE_PATH.LOGIN);
       return;
     }
 
