@@ -72,6 +72,18 @@ const QuizController = {
         }
     },
 
+    // Lấy tất cả các quiz
+    getAllQuizzes: async (req, res) => {
+        try {
+            console.log("XIN CHÀO");
+            
+            const quizzes = await Quiz.find({ deleted: false }).populate("course");
+            res.status(200).json({ data: quizzes, message: "Lấy tất cả bài kiểm tra thành công" });
+        } catch (error) {
+            res.status(500).json({ message: "Lấy tất cả bài kiểm tra thất bại" });
+        }
+    },
+
 };
 
 module.exports = QuizController;

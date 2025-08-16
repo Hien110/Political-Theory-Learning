@@ -2,6 +2,9 @@ export const  ROUTE_PATH = {
 
     //site routes
     HOME: "/",
+    COURSE: "/course",
+    TEST_QUIZ_LIST: "/test-quiz-list",
+    NEWS: "/news",
 
     // Authentication routes
     VERIFY: "/verify",

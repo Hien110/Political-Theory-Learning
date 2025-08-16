@@ -55,20 +55,28 @@ const Header = () => {
                   </Link>
                 </li>
                 <li >
-                  <a
-                    href="#"
+                  <Link
+                    to={ROUTE_PATH.COURSE}
                     className="text-white font-medium hover:text-yellow-300 transition-colors"
                   >
                     Môn học
-                  </a>
+                  </Link>
                 </li>
                 <li >
-                  <a
-                    href="#"
+                  <Link
+                    to={ROUTE_PATH.TEST_QUIZ_LIST}
                     className="text-white font-medium hover:text-yellow-300 transition-colors"
                   >
                     Ôn luyện
-                  </a>
+                  </Link>
+                </li>
+                <li >
+                  <Link
+                    to={ROUTE_PATH.NEWS}
+                    className="text-white font-medium hover:text-yellow-300 transition-colors"
+                  >
+                    Tin tức
+                  </Link>
                 </li>
 
               {/* User menu */}
