@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import courseService from "../services/courseService";
 import CourseCard from "../components/CourseCard";
 
+import { motion } from "framer-motion";
 function HomePage() {
   const [course, setCourse] = useState(null);
 
@@ -21,6 +22,17 @@ function HomePage() {
 
   return (
     <div className="min-h-screen">
+      {/* Banner hình ảnh */}
+      <div className="p-4 px-10 mt-10">
+        <motion.img
+          src="https://inoxnamcuong.vn/wp-content/uploads/2022/08/146_chao_mung_75_nam_quoc_khanh_2_9_greenair_viet_nam-1.jpg"
+          alt="Banner"
+          className="w-full h-90 rounded-lg shadow-lg"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
       {/* Marquee Section */}
       <div className="bg-yellow-500 text-red-900 py-1 overflow-hidden whitespace-nowrap fixed top-20 w-full z-10">
         <div className="animate-marquee font-medium flex space-x-12 px-4">
@@ -67,8 +79,7 @@ function HomePage() {
               </div>
               <h3 className="text-xl font-bold mb-2">Câu hỏi ôn tập</h3>
               <p className="text-gray-700">
-                Hàng trăm câu hỏi trắc có đáp án chi tiết giúp củng cố kiến
-                thức
+                Hàng trăm câu hỏi trắc có đáp án chi tiết giúp củng cố kiến thức
               </p>
             </div>
 
@@ -83,7 +94,6 @@ function HomePage() {
             </div>
           </div>
         </section>
-
       </main>
     </div>
   );

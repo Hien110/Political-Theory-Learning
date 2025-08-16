@@ -89,9 +89,9 @@ const quizResultService = {
     },
 
     //Lấy kết quả theo userId
-    getQuizResultsByUserId: async () => {
+    getQuizResultsByUserId: async (userId) => {
         try {
-            const response = await axios.get(`${API_URL}/user/getAllResult`, {
+            const response = await axios.get(`${API_URL}/user/getAllResult/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${userService.getToken()}`
                 }

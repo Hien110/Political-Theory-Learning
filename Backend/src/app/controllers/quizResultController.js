@@ -77,11 +77,10 @@ const QuizResultController = {
     }
   },
 
-  // Lấy quiz theo userId
+  // Lấy tất cả kết quả quiz theo userId
   getQuizResultsByUserId: async (req, res) => {
     try {
-      const userId = req.user.userId; // Lấy userId từ token
-      console.log(userId);
+      const userId = req.params.userId; // Lấy userId từ params
 
       const quizResults = await QuizResult.find({ student: userId }).populate("course quiz");
       if (!quizResults || quizResults.length === 0) {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import QuizService from "../services/quizService";
 import quizResultService from "../services/quizResultService";
 import userService from "../services/userService";
@@ -27,6 +27,7 @@ function TestQuizPage() {
   })();
 
   const { quizId } = useParams();
+  const navigate = useNavigate();
   const user = userService.getCurrentUser();
   const [quiz, setQuiz] = useState(null);
   const [timeLeft, setTimeLeft] = useState(0);
@@ -210,9 +211,11 @@ function TestQuizPage() {
         // Xóa endTime khỏi localStorage
         localStorage.removeItem(`quiz-${quizId}-endTime`);
         // Chuyển hướng hoặc thông báo thành công
-        window.location.href = ROUTE_PATH.STUDENT_QUIZ_RESULT.replace(
-          ":quizResultId",
-          res.data._id
+        navigate(
+          ROUTE_PATH.STUDENT_QUIZ_RESULT.replace(":quizResultId", res.data._id),
+          {
+            state: { linkFrom: "quizPage" },
+          }
         );
       }
     } catch (error) {

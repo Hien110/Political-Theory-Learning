@@ -287,6 +287,22 @@ class UserController {
       return res.status(500).json({ message: "Đã xảy ra lỗi" });
     }
   }
+
+  //Lấy tài khoản user theo ID
+  async getUserById(req, res) {
+    try {
+      const userId = req.params.id;
+      
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ message: "Người dùng không tồn tại" });
+      }
+      return res.status(200).json({data: user, message: "Lấy thông tin người dùng thành công"});
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Đã xảy ra lỗi" });
+    }
+  }
 }
 
 module.exports = new UserController();

@@ -5,8 +5,6 @@ import { uploadToCloudinary } from "../services/uploadCloudinary";
 import userService from "../services/userService";
 import quizResultService from "../services/quizResultService";
 
-import { useLocation } from "react-router-dom";
-
 import { toast } from "sonner";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -26,9 +24,7 @@ import AverageScoreCard from "../components/AverageScoreCard";
 import ResultClassification from "../components/ResultClassification";
 
 const UserProfile = () => {
-  const location = useLocation();
-  const user =
-    JSON.parse(localStorage.getItem("user")) || location.state?.user || {};
+  const user = userService.getCurrentUser();
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [fullName, setFullName] = useState(user?.name || "");
@@ -67,7 +63,7 @@ const UserProfile = () => {
 
   useEffect(() => {
     const fetchQuizResults = async () => {
-      const response = await quizResultService.getQuizResultsByUserId();
+      const response = await quizResultService.getQuizResultsByUserId(user._id);
       if (response.success) {
         setQuizResults(response.data);
       }
@@ -232,7 +228,7 @@ const UserProfile = () => {
 
             {/* Danh sách quiz results có scroll riêng */}
             <div className="flex-1 overflow-y-auto pr-2">
-              {quizResults.map((item) => (
+              {quizResults.reverse().map((item) => (
                 <QuizHistoryItem key={item._id} history={item} />
               ))}
             </div>
