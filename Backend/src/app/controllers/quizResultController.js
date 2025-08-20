@@ -60,7 +60,7 @@ const QuizResultController = {
   getQuizResultsByCourse: async (req, res) => {
     try {
       const { courseId } = req.params;
-      const quizResults = await QuizResult.find({ course: courseId });
+      const quizResults = await QuizResult.find({ course: courseId }).populate("student quiz course");
       if (!quizResults || quizResults.length === 0) {
         return res
           .status(404)
@@ -98,6 +98,28 @@ const QuizResultController = {
         .json({ message: "Lỗi khi lấy kết quả quiz theo người dùng", error });
     }
   },
+
+  // Lấy kết quả quiz theo quizID
+  getQuizResultsByQuizId: async (req, res) => {
+    try {
+      const quizId = req.params.quizId;
+
+      const quizResults = await QuizResult.find({ quiz: quizId }).populate("student course");
+      if (!quizResults || quizResults.length === 0) {
+        return res
+          .status(200)
+          .json({ data: [], message: "Không tìm thấy kết quả quiz cho bài kiểm tra này" });
+      }
+      res.status(200).json({
+        data: quizResults,
+        message: "Lấy kết quả quiz theo bài kiểm tra thành công",
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Lỗi khi lấy kết quả quiz theo bài kiểm tra", error });
+    }
+  }
 };
 
 module.exports = QuizResultController;

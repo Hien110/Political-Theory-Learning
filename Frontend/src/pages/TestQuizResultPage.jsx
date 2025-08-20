@@ -159,14 +159,30 @@ function TestQuizResultPage() {
           </Link>
         ) : linkFrom === "quizPage" ? (
           <Link
-            to={ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(":courseId", result.course?._id)}
+            to={ROUTE_PATH.STUDENT_COURSE_DETAIL.replace(
+              ":courseId",
+              result.course?._id
+            )}
             className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại bài học
           </Link>
+        ) : linkFrom === "quizManager" ? (
+          <Link
+            to={ROUTE_PATH.LECTURER_QUIZ_RESULT_DETAIL.replace(
+              ":courseId",
+              result.course?._id
+            ).replace(":quizId", result.quiz?._id)}
+            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
+          >
+            ⬅ Quay lại
+          </Link>
         ) : (
           <Link
-            to={ROUTE_PATH.LECTURER_STUDENT_DETAIL.replace(":studentId", result.student?._id)}
+            to={ROUTE_PATH.LECTURER_STUDENT_DETAIL.replace(
+              ":studentId",
+              result.student?._id
+            )}
             className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại

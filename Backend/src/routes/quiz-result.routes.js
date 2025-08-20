@@ -12,10 +12,13 @@ router.post('/', authenticateToken, authorize('student'), quizResultController.c
 router.get('/quizReult/:quizResultId', authenticateToken, quizResultController.getQuizResultById);
 
 // Lấy kết quả quizResult theo khóa học
-router.get('/course/:courseId', authenticateToken, authorize('student'), quizResultController.getQuizResultsByCourse);
+router.get('/course/:courseId', authenticateToken, authorize('student', 'lecturer'), quizResultController.getQuizResultsByCourse);
 
 // Lấy kết quả theo userId
 router.get('/user/getAllResult/:userId', authenticateToken, authorize('student', 'lecturer'), quizResultController.getQuizResultsByUserId);
+
+// Lấy kết quả quiz theo quizId
+router.get('/quiz/:quizId', authenticateToken, authorize('student', 'lecturer'), quizResultController.getQuizResultsByQuizId);
 
 // Lấy nhiều quizResult theo userId và quizId
 router.get('/:userId/:quizId', authenticateToken, authorize('student'), quizResultController.getByUserIdAndQuizId);

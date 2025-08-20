@@ -1,6 +1,5 @@
 import {
   Box,
-  CssBaseline,
   Drawer,
   List,
   ListItemButton,
@@ -17,6 +16,9 @@ import PeopleIcon from "@mui/icons-material/People";
 import BookIcon from "@mui/icons-material/Book";
 import QuizIcon from '@mui/icons-material/Quiz';
 import HelpCenterIcon from '@mui/icons-material/HelpCenter';
+import ReceiptIcon from '@mui/icons-material/Receipt';
+
+import userService from "../services/userService";
 
 import { yellow } from "@mui/material/colors";
 
@@ -30,6 +32,7 @@ const navItems = [
   { label: "Quản lý môn học", icon: <BookIcon />, path: ROUTE_PATH.LECTURER_COURSES },
   { label: "Ngân hàng câu hỏi", icon: <QuizIcon />, path: ROUTE_PATH.LECTURER_QUESTION_BANK },
   { label: "Quản lý bài kiểm tra", icon: <HelpCenterIcon />, path: ROUTE_PATH.LECTURER_QUIZ },
+  { label: "Quản lý kết quả kiểm tra", icon: <ReceiptIcon />, path: ROUTE_PATH.LECTURER_QUIZ_RESULT },
   { label: "Tin tức", icon: <NewspaperIcon />, path: ROUTE_PATH.LECTURER_NEWS },
 ];
 
@@ -42,7 +45,7 @@ const navItems = [
 
 export default function SidebarLecturer({ children }) {
   const location = useLocation();
-  const user = JSON.parse(localStorage.getItem("user")) || {};
+  const user = userService.getCurrentUser() || {};
 
   return (
       <Box sx={{ display: "flex" }}>
@@ -65,7 +68,7 @@ export default function SidebarLecturer({ children }) {
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              p: 2,
+              pb: 1,
             }}
           >
             <Avatar
@@ -95,7 +98,7 @@ export default function SidebarLecturer({ children }) {
           {/* Menu items */}
           <Box
             sx={{
-              height: "calc(100vh - 180px)",
+              height: "calc(100vh - 210px)",
               overflowY: "auto",
               "&::-webkit-scrollbar": { width: "6px" },
               "&::-webkit-scrollbar-track": { background: "#f1f1f1" },
