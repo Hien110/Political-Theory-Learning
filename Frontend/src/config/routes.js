@@ -44,6 +44,10 @@ const ManageQuizListPage = React.lazy(() => import("../pages/ManageQuizListPage"
 const ManageQuizCreatePage = React.lazy(() => import("../pages/ManageQuizCreatePage"));
 const ManageQuizDetailPage = React.lazy(() => import("../pages/ManageQuizDetailPage"));
 
+const ManageQuizResultPage = React.lazy(() => import("../pages/ManageQuizResultPage"));
+const ManageQuizResultCoursePage = React.lazy(() => import("../pages/ManageQuizResultCoursePage"));
+const ManageQuizResultDetailPage = React.lazy(() => import("../pages/ManageQuizResultDetailPage"));
+
 const ManageNewsPage = React.lazy(() => import("../pages/ManageNewsPage"));
 
 // Student pages
@@ -93,6 +97,10 @@ const AppRoutes = [
   { path: ROUTE_PATH.LECTURER_QUIZ_LIST, page: ManageQuizListPage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_QUIZ_CREATE, page: ManageQuizCreatePage, layout: lecturerLayout },
   { path: ROUTE_PATH.LECTURER_QUIZ_DETAIL, page: ManageQuizDetailPage, layout: lecturerLayout },
+
+  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT, page: ManageQuizResultPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT_LIST, page: ManageQuizResultCoursePage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_QUIZ_RESULT_DETAIL, page: ManageQuizResultDetailPage, layout: lecturerLayout },
 
   { path: ROUTE_PATH.LECTURER_NEWS, page: ManageNewsPage, layout: lecturerLayout },
 

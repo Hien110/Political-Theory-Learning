@@ -37,6 +37,10 @@ export const  ROUTE_PATH = {
     LECTURER_QUIZ_CREATE: "/lecturer/quiz/:courseId/create",
     LECTURER_QUIZ_DETAIL: "/lecturer/quiz/:courseId/:quizId",
 
+    LECTURER_QUIZ_RESULT: "/lecturer/result-quiz",
+    LECTURER_QUIZ_RESULT_LIST: "/lecturer/result-quiz/:courseId/list",
+    LECTURER_QUIZ_RESULT_DETAIL: "/lecturer/result-quiz/:courseId/:quizId",
+
     LECTURER_NEWS: "/lecturer/news",
 
     // Student routes
