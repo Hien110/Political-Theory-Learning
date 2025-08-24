@@ -143,7 +143,7 @@ class UserController {
       if (user.status !== "active") {
         return res
           .status(403)
-          .json({ message: "Tài khoản chưa được kích hoạt" });
+          .json({ message: "Tài khoản chưa được kích hoạt hoặc bị khóa" });
       }
 
       // Đăng nhập thành công trả về thông tin người dùng trừ mật khẩu

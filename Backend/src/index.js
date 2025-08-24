@@ -16,7 +16,13 @@ db.connect();
 
 
 // Middleware
-app.use(cors());
+
+// Cấu hình CORS
+app.use(cors({
+    origin: 'https://political-theory-learning.vercel.app',
+    credentials: true
+}));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride('_method'));
@@ -48,8 +54,3 @@ const server = app.listen(PORT, '0.0.0.0', () => {
   console.log(`Ứng dụng đang chạy trên cổng ${PORT}`);
 });
 
-// Cấu hình CORS
-// app.use(cors({
-//     origin: 'http://localhost:5173',
-//     credentials: true
-// }));

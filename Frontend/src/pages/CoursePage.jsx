@@ -15,9 +15,6 @@ function CoursePage() {
     fetchCourse();
   }, []);
 
-  if (!course) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div className="min-h-screen">
@@ -29,7 +26,7 @@ function CoursePage() {
           </h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {course.map((course) => (
+            {course?.map((course) => (
               <CourseCard key={course._id} course={course} />
             ))}
           </div>
