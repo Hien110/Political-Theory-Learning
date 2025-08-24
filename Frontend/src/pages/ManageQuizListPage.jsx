@@ -18,6 +18,8 @@ function ManageQuizListPage() {
   const [showModalDelete, setShowModalDelete] = useState(false);
   const [quizToDelete, setQuizToDelete] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
     const fetchQuizzes = async () => {
       try {
@@ -61,6 +63,10 @@ function ManageQuizListPage() {
     setQuizToDelete(null);
   };
 
+  const filteredQuizzes = quizzes.filter((quiz) =>
+    quiz.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (Loading) {
     return <div className="min-h-screen">Loading...</div>;
   }
@@ -68,15 +74,24 @@ function ManageQuizListPage() {
   return (
     <div>
       <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
-        Danh sách bài kiểm tra
+        Quản lý bài kiểm tra
       </h1>
-      {quizzes.length === 0 ? (
+      <div className="mb-6">
+        <input
+          type="text"
+          placeholder="Tìm kiếm bài kiểm tra..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+        />
+      </div>
+      {filteredQuizzes.length === 0 ? (
         <p className="text-gray-500 italic">
           Khóa học này chưa có bài kiểm tra nào.
         </p>
       ) : (
         <div className="flex flex-col gap-4 w-full">
-          {quizzes.map((quiz) => (
+          {filteredQuizzes.map((quiz) => (
             <div
               key={quiz._id}
               className="w-full flex justify-between items-center bg-white p-4 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200"
@@ -99,16 +114,16 @@ function ManageQuizListPage() {
                 {quiz.typeQuiz === "manual" && "Thủ công"}
                 {quiz.typeQuiz === "excel" && "Excel"}
                 {quiz.typeQuiz === "random" && "Tự động"}
-
                 {/* Ngày tạo */}
                 {/* <p className="text-gray-600">
                   <span className="font-medium">Ngày tạo:</span>{" "}
                   {new Date(quiz.createdAt).toLocaleDateString("vi-VN")}
                 </p> */}
-
                 {/* Thời gian làm bài */}
                 <p className="">
-                  <span className="font-medium text-gray-600">Thời gian làm bài:</span>{" "}
+                  <span className="font-medium text-gray-600">
+                    Thời gian làm bài:
+                  </span>{" "}
                   {quiz.timeLimit} phút
                 </p>
               </div>
@@ -116,15 +131,19 @@ function ManageQuizListPage() {
               {/* Nút hành động */}
               <div className="">
                 <button
-                  className="cursor-pointer text-yellow-600 border border-yellow-600 px-3 py-1 text-sm rounded-lg hover:bg-yellow-600 hover:text-white font-medium transition duration-300"
+                  className="cursor-pointer text-yellow-600 border border-yellow-600 px-3 py-1 text-sm rounded-lg hover:bg-yellow-100 font-medium transition duration-300"
                   onClick={() => {
-                    window.location.href = ROUTE_PATH.LECTURER_QUIZ_DETAIL.replace(":courseId", courseId).replace(":quizId", quiz._id);
+                    window.location.href =
+                      ROUTE_PATH.LECTURER_QUIZ_DETAIL.replace(
+                        ":courseId",
+                        courseId
+                      ).replace(":quizId", quiz._id);
                   }}
                 >
                   Xem chi tiết
                 </button>
                 <button
-                  className="cursor-pointer text-red-600 border border-red-600 px-3 py-1 text-sm rounded-lg hover:bg-red-600 hover:text-white font-medium transition duration-300 ml-3"
+                  className="cursor-pointer text-red-600 border border-red-600 px-3 py-1 text-sm rounded-lg hover:bg-red-100 font-medium transition duration-300 ml-3"
                   onClick={() => {
                     setQuizToDelete(quiz);
                     setShowModalDelete(true);

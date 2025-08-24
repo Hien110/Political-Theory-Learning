@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import MyEditor from "./MyEditor";
 
 import lessonService from "../services/lessonService";
+import userService from "../services/userService";
 
 import {
   uploadMultipleFilesToCloudinary,
@@ -16,7 +17,7 @@ import {
 import { toast } from "sonner";
 
 function LessonDetailCard({ lesson }) {
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = userService.getCurrentUser();
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [loadingLesson, setLoadingLesson] = useState(false);
@@ -34,6 +35,13 @@ function LessonDetailCard({ lesson }) {
   const lessonImagesRef = useRef(null);
   const lessonFilesRef = useRef(null);
   const closeModals = () => {
+    setEditLesson({
+    title: lesson.title,
+    content: lesson.content,
+    videoUrl: lesson.videoUrl,
+    imageUrls: lesson.imageUrls,
+    fileUrls: lesson.fileUrls,
+  });
     setShowEditModal(false);
   };
 
@@ -119,7 +127,7 @@ function LessonDetailCard({ lesson }) {
         {user.role === "lecturer" && (
           <button
             onClick={() => setShowEditModal(true)}
-            className="cursor-pointer text-red-600 border border-red-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-red-600 hover:text-white font-medium"
+            className="cursor-pointer text-red-600 border border-red-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-red-100 font-medium"
           >
             Chỉnh sửa bài học
           </button>
@@ -363,6 +371,7 @@ function LessonDetailCard({ lesson }) {
 
                 <div className="flex gap-4">
                   <button
+                    type="button"
                     onClick={() => closeModals()}
                     className="cursor-pointer w-full py-3 bg-gray-300 text-gray-700 font-bold rounded-lg hover:bg-gray-400 transition-colors duration-300"
                   >

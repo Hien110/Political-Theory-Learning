@@ -12,11 +12,11 @@ const AuthCallback = () => {
     const parsedUser = user ? JSON.parse(user) : null;
 
     if (token && parsedUser) {
-      // Lưu token
-      localStorage.setItem("token", token);
+      // Lưu token ở sessionStorage
+      sessionStorage.setItem("token", token);
 
-      // Lưu thông tin user
-      localStorage.setItem("user", JSON.stringify(parsedUser));
+      // Lưu thông tin user ở sessionStorage
+      sessionStorage.setItem("user", JSON.stringify(parsedUser));
 
       if (parsedUser.role === "lecturer") {
         navigate("/");

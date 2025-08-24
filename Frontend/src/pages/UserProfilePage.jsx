@@ -94,9 +94,9 @@ const UserProfile = () => {
       const response = await userService.updateUser(userData);
       if (response.success) {
         toast.success(response.message);
-        // Cập nhật lại thông tin người dùng trong localStorage
+        // Cập nhật lại thông tin người dùng trong sessionStorage
         const updatedUser = { ...user, ...userData, avatar: imageUrl };
-        localStorage.setItem("user", JSON.stringify(updatedUser));
+        sessionStorage.setItem("user", JSON.stringify(updatedUser));
         window.location.reload(); // Tải lại trang để cập nhật thông tin
         setShowUpdateModal(false);
       } else {
@@ -138,8 +138,8 @@ const UserProfile = () => {
 
   return (
     <>
-      <div className=" bg-gray-50 py-10 px-10 flex space-x-5">
-        <div className="w-1/3  min-h-[400px]">
+      <div className="bg-gray-50 py-10 px-4 md:px-10 flex flex-col md:flex-row md:space-x-5 space-y-5 md:space-y-0">
+        <div className="w-full md:w-1/3 min-h-[400px]">
           <div className="border border-gray-300 rounded-lg shadow-sm p-6 bg-white">
             <div className="flex flex-col items-center space-y-4">
               <img
@@ -154,13 +154,13 @@ const UserProfile = () => {
               <div className="mt-4 space-x-3 flex justify-center">
                 <button
                   onClick={() => setShowUpdateModal(true)}
-                  className="px-5 bg-yellow-500 text-white py-2 text-[12px] rounded hover:bg-yellow-300 transition-colors duration-300"
+                  className="px-5 bg-white border border-yellow-500 text-yellow-500 py-2 text-[12px] rounded hover:bg-yellow-100 transition-colors duration-300 hover:cursor-pointer"
                 >
                   Cập nhật hồ sơ
                 </button>
                 <button
                   onClick={() => setShowPasswordModal(true)}
-                  className="px-5 bg-yellow-500 text-white py-2 text-[12px] rounded hover:bg-yellow-300 transition-colors duration-300"
+                  className="px-5 bg-white border border-yellow-500 text-yellow-500 py-2 text-[12px] rounded hover:bg-yellow-100 transition-colors duration-300 hover:cursor-pointer"
                 >
                   Đổi mật khẩu
                 </button>
@@ -220,7 +220,7 @@ const UserProfile = () => {
           {/* Điểm trung bình */}
           <AverageScoreCard quizResults={quizResults} />
         </div>
-        <div className="w-2/3  min-h-[400px]">
+        <div className="w-full md:w-2/3 min-h-[400px]">
           <div className=" border p-4 border border-gray-300 rounded-lg shadow-sm bg-white max-h-[650px] flex flex-col">
             <h2 className="text-xl font-bold border-b border-gray-300 pb-3 mb-3">
               Lịch sử làm bài

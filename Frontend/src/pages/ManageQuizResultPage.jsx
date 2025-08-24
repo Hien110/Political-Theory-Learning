@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import courseService from "../services/courseService";
+import userService from "../services/userService";
 import { ROUTE_PATH } from "../constants/routePath";
 
 function ManageQuizResultPage() {
@@ -16,7 +17,7 @@ function ManageQuizResultPage() {
     fetchCourses();
   }, []);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = userService.getCurrentUser();
 
   const handleDetail = (courseId) => {
     if (!user) {
@@ -85,7 +86,7 @@ function ManageQuizResultPage() {
                   onClick={() => {
                     handleDetail(course._id);
                   }}
-                  className="cursor-pointer mt-auto w-full py-2 rounded-lg bg-gradient-to-r from-red-500 to-red-400 text-white font-medium text-sm shadow-md transition-colors duration-500 ease-in-out hover:from-red-600 hover:to-red-500"
+                  className="cursor-pointer mt-auto w-full py-2 rounded-lg bg-white text-red-500 border border-red-500 font-medium text-sm shadow-md transition-colors duration-500 ease-in-out hover:bg-red-100"
                 >
                   Xem các bài kiểm tra của sinh viên
                 </button>

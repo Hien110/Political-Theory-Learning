@@ -266,7 +266,7 @@ function ManageCourseDetailPage() {
         <div className="flex space-x-4 justify-start">
           <button
             onClick={() => setShowEditModal(true)}
-            className="cursor-pointer text-yellow-600 border border-yellow-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-yellow-600 hover:text-white font-medium"
+            className="cursor-pointer text-yellow-600 border border-yellow-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-yellow-100 font-medium"
           >
             Chỉnh sửa
           </button>
@@ -275,7 +275,7 @@ function ManageCourseDetailPage() {
               setShowDeleteCourseModal(true);
               setSelectedCourse(course);
             }}
-            className="cursor-pointer text-red-600 border border-red-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-red-600 hover:text-white font-medium"
+            className="cursor-pointer text-red-600 border border-red-600 px-4 py-2 rounded-lg text-sm transition duration-300 hover:bg-red-100 font-medium"
           >
             Xóa bài học
           </button>
@@ -308,7 +308,7 @@ function ManageCourseDetailPage() {
                 <div className="">
                   <button
                     onClick={() => handleViewLesson(lesson._id)}
-                    className="cursor-pointer text-yellow-600 border border-yellow-600 px-3 py-1 text-sm rounded-lg hover:bg-yellow-600 hover:text-white font-medium transition duration-300"
+                    className="cursor-pointer text-yellow-600 border border-yellow-600 px-3 py-1 text-sm rounded-lg hover:bg-yellow-100 font-medium transition duration-300"
                   >
                     Xem chi tiết
                   </button>
@@ -317,7 +317,7 @@ function ManageCourseDetailPage() {
                       setShowDeleteLessonModal(true);
                       setSelectedLesson(lesson);
                     }}
-                    className="cursor-pointer text-red-600 border border-red-600 px-3 py-1 text-sm rounded-lg hover:bg-red-600 hover:text-white font-medium transition duration-300 ml-3"
+                    className="cursor-pointer text-red-600 border border-red-600 px-3 py-1 text-sm rounded-lg hover:bg-red-100 font-medium transition duration-300 ml-3"
                   >
                     Xóa bài học
                   </button>

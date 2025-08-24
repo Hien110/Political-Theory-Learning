@@ -115,7 +115,7 @@ function ManageQuizCreatePage() {
       const response = await QuizService.createQuiz(courseId, newQuiz);
       if (response.success) {
         // Reset form
-        toast.success("Tạo quiz thành công! Đang quay về trang danh sách quiz");
+        toast.success("Tạo bài kiểm tra thành công! Đang quay về trang danh sách bài kiểm tra ...");
         // chờ 3s sau đó chuyển hướng
         setTimeout(() => {
           window.location.href = ROUTE_PATH.LECTURER_QUIZ_LIST.replace(":courseId", courseId);
@@ -207,7 +207,7 @@ function ManageQuizCreatePage() {
               {questionBank.map((q) => (
                 <label
                   key={q._id}
-                  className="flex items-center gap-2 p-2 rounded hover:bg-gray-100"
+                  className="flex items-center gap-2 p-2 rounded hover:bg-gray-100 cursor-pointer"
                 >
                   <input
                     type="checkbox"
@@ -291,7 +291,7 @@ function ManageQuizCreatePage() {
             type="submit"
             className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
           >
-            Tạo quiz
+            Tạo bài kiểm tra
           </button>
         </div>
       </form>

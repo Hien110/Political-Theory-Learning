@@ -11,11 +11,11 @@ const userService = {
         password,
       });
 
-      // Lưu token vào localStorage (tuỳ bạn muốn lưu ở đâu)
+      // Lưu token vào session (tuỳ bạn muốn lưu ở đâu)
       const { token, user } = response.data;
       if (token) {
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
+        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("user", JSON.stringify(user));
       }
 
       return { success: true, user, token };
@@ -31,16 +31,16 @@ const userService = {
 
   // Đăng xuất người dùng
   logout: () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
   },
 
   getToken: () => {
-    return localStorage.getItem("token");
+    return sessionStorage.getItem("token");
   },
 
   getCurrentUser: () => {
-    const user = localStorage.getItem("user");
+    const user = sessionStorage.getItem("user");
     return user ? JSON.parse(user) : null;
   },
 
@@ -177,7 +177,7 @@ const userService = {
   // Lấy tất cả student
   getAllStudents: async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = userService.getToken();
       const response = await axios.get(`${API_URL}/students`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -200,7 +200,7 @@ const userService = {
   // Khóa tài khoản student
   lockStudentAccount: async (studentId) => {
     try {
-      const token = localStorage.getItem("token");
+      const token = userService.getToken();
       const response = await axios.put(`${API_URL}/students/lock`, {
         studentId,
       }, {
