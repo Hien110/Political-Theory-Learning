@@ -232,7 +232,7 @@ const Header = () => {
               <li>
                 <button
                   onClick={handleLogout}
-                  className="w-full text-left px-4 py-3 hover:bg-gray-100 text-red-500 font-semibold"
+                  className="w-full text-left px-4 py-3 hover:bg-gray-100 text-red-500 font-semibold cursor-pointer"
                 >
                   Đăng xuất
                 </button>
@@ -241,7 +241,7 @@ const Header = () => {
               <li>
                 <Link
                   to="/login"
-                  className="block px-4 py-3 hover:bg-gray-100 text-red-600 font-semibold"
+                  className="block px-4 py-3 hover:bg-gray-100 text-red-600 font-semibold cursor-pointer"
                   onClick={toggleMenu}
                 >
                   Đăng nhập

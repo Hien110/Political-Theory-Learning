@@ -40,17 +40,17 @@ function TestQuizResultPage() {
   }, [quizResultId]);
 
   if (loading) {
-    return <div className="p-6 text-center">Đang tải kết quả...</div>;
+    return <div className="p-6 text-center min-h-screen">Đang tải kết quả...</div>;
   }
 
   if (!result) {
     return (
-      <div className="p-6 text-center text-red-500">Không tìm thấy kết quả</div>
+      <div className="p-6 text-center text-red-500 min-h-screen">Không tìm thấy kết quả</div>
     );
   }
 
   return (
-    <div className="max-w-5xl mx-auto my-3 p-8 bg-white shadow-lg rounded-2xl border border-gray-200">
+    <div className="max-w-5xl mx-auto my-3 p-8 bg-white shadow-lg rounded-2xl border border-gray-200 min-h-screen">
       {/* Tiêu đề */}
       <h1 className="text-3xl font-bold text-center text-red-600 mb-8">
         Kết quả bài kiểm tra

@@ -74,17 +74,24 @@ function ManageStudentPage() {
         Quản lý sinh viên
       </h1>
 
-      {/* Ô tìm kiếm */}
-      <div className="mb-4 flex justify-start">
-        <input
-          type="text"
-          placeholder="Tìm kiếm sinh viên theo tên..."
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
-        />
-      </div>
+      <div className="mb-4 flex justify-between text-center items-center">
+        {/* Ô tìm kiếm */}
+        <div className="mb-4 flex w-2/3">
+          <input
+            type="text"
+            placeholder="Tìm kiếm sinh viên theo tên..."
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+        </div>
 
+        {/* Tổng số sinh viên */}
+        <div className="mb-4 text-red-400">
+          <span className="font-bold">Tổng số sinh viên:</span>{" "}
+          {allStudents.length} sinh viên
+        </div>
+      </div>
       <div className="overflow-x-auto rounded-lg border border-gray-200">
         <table className="w-full border-collapse text-xs sm:text-sm md:text-base text-gray-700">
           <thead className="bg-gray-50 sticky top-0 z-10">
@@ -191,7 +198,7 @@ function ManageStudentPage() {
       <AnimatePresence>
         {showLockModal && (
           <motion.div
-            className="fixed inset-0 bg-[#000000c4] flex w-full justify-center items-center z-50 px-4"
+            className="fixed inset-0 bg-[#000000c4] flex w-full justify-center items-center z-2000 px-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
