@@ -49,7 +49,7 @@ const server = app.listen(PORT, '0.0.0.0', () => {
 });
 
 // Cấu hình CORS
-app.use(cors({
-    origin: 'https://political-theory-learning.vercel.app',
-    credentials: true
-}));
+// app.use(cors({
+//     origin: 'http://localhost:5173',
+//     credentials: true
+// }));
