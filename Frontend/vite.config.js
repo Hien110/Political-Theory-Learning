@@ -11,11 +11,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:3000",
+        target: "https://political-theory-learning.onrender.com",
         changeOrigin: true,
       },
       "/auth": {
-        target: "http://localhost:3000",
+        target: "https://political-theory-learning.onrender.com",
         changeOrigin: true,
         secure: false,
       },
