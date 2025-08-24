@@ -1,4 +1,4 @@
-const QuizResult = require("../models/quizResult");
+const QuizResult = require("../models/QuizResult");
 
 const QuizResultController = {
   // Tạo kết quả quiz
