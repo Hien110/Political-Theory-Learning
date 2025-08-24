@@ -59,14 +59,6 @@ function TestQuizListPage() {
     }
   };
 
-  if (!quizzes.length) {
-    return (
-      <div className="text-center min-h-screen flex items-center justify-center text-lg font-medium text-gray-600">
-        Đang tải dữ liệu bài kiểm tra...
-      </div>
-    );
-  }
-
   return (
     <div className="p-8 min-h-screen">
       <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center text-red-800">
@@ -74,7 +66,7 @@ function TestQuizListPage() {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {quizzes.map((quiz) => (
+        {quizzes?.map((quiz) => (
           <div
             key={quiz._id}
             className="group bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-xl hover:border-yellow-500 transition"
