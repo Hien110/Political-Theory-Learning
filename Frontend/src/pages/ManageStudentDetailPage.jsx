@@ -45,7 +45,7 @@ function ManageStudentDetailPage() {
   return (
     <div className="min-h-screen ">
       {/* Tiêu đề */}
-      <h1 className="text-3xl font-bold mb-8 text-gray-800">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
         Hồ sơ sinh viên <span className="text-red-600">{student?.name}</span>
       </h1>
 

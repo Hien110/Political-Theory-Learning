@@ -119,6 +119,26 @@ const QuizResultController = {
         .status(500)
         .json({ message: "Lỗi khi lấy kết quả quiz theo bài kiểm tra", error });
     }
+  },
+
+  // Lấy tất cả bài quiz
+  getAllQuizResults: async (req, res) => {
+    try {
+      const quizResults = await QuizResult.find().populate("student quiz course");
+      if (!quizResults || quizResults.length === 0) {
+        return res
+          .status(404)
+          .json({ message: "Không tìm thấy kết quả quiz nào" });
+      }
+      res.status(200).json({
+        data: quizResults,
+        message: "Lấy tất cả kết quả quiz thành công",
+      });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Lỗi khi lấy tất cả kết quả quiz", error });
+    }
   }
 };
 

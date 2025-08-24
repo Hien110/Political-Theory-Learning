@@ -94,12 +94,12 @@ function ManageQuizDetailPage() {
       console.log(payload);
 
       if (res.success) {
-        toast.success("Cập nhật quiz thành công!");
+        toast.success("Cập nhật bài kiểm tra thành công!");
       } else {
-        toast.error(res.message || "Lỗi khi lưu quiz");
+        toast.error(res.message || "Lỗi khi lưu bài kiểm tra");
       }
     } catch (error) {
-      toast.error("Lỗi khi lưu quiz: " + error.message);
+      toast.error("Lỗi khi lưu bài kiểm tra: " + error.message);
     }
   };
 
@@ -161,9 +161,9 @@ function ManageQuizDetailPage() {
               </p>
               <button
                 onClick={() => handleRemoveQuestion(item._id)}
-                className="text-red-500 hover:text-red-700 font-bold text-lg cursor-pointer"
+                className="text-sm border border-red-500 text-red-500 px-2 py-1 rounded-lg hover:bg-red-100 transition-all duration-300 cursor-pointer"
               >
-                ✕
+                Xóa
               </button>
             </div>
             <ul className="space-y-2 pl-5">

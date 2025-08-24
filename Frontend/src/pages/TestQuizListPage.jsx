@@ -68,7 +68,7 @@ function TestQuizListPage() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 min-h-screen">
       <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center text-red-800">
         Danh sách bài ôn tập
       </h1>

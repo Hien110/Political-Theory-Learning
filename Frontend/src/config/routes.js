@@ -74,12 +74,12 @@ const AppRoutes = [
   { path: ROUTE_PATH.NEWS, page: NewsPage, layout: studentLayout },
 
   // User management routes
-  { path: ROUTE_PATH.USER_PROFILE, page: UserProfilePage, layout: studentLayout },
-  { path: ROUTE_PATH.LECTURER_STUDENT_DETAIL, page: ManageStudentDetailPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.USER_PROFILE, page: UserProfilePage, layout: studentLayout},
+  { path: ROUTE_PATH.LECTURER_STUDENT_DETAIL, page: ManageStudentDetailPage, layout: lecturerLayout},
 
   // lecturer routes
-  { path: ROUTE_PATH.LECTURER_STATISTICS, page: StatisticsPage, layout: lecturerLayout },
-  { path: ROUTE_PATH.LECTURER_STUDENTS, page: ManageStudentPage, layout: lecturerLayout },
+  { path: ROUTE_PATH.LECTURER_STATISTICS, page: StatisticsPage, layout: lecturerLayout, allowedRoles: ["lecturer"] },
+  { path: ROUTE_PATH.LECTURER_STUDENTS, page: ManageStudentPage, layout: lecturerLayout, allowedRoles: ["lecturer"] },
 
   // Question Bank
   { path: ROUTE_PATH.LECTURER_QUESTION_BANK, page: ManageQuestionBankPage, layout: lecturerLayout },

@@ -23,5 +23,7 @@ router.get('/quiz/:quizId', authenticateToken, authorize('student', 'lecturer'),
 // Lấy nhiều quizResult theo userId và quizId
 router.get('/:userId/:quizId', authenticateToken, authorize('student'), quizResultController.getByUserIdAndQuizId);
 
+// Lấy tất cả kết quả quiz
+router.get('/', authenticateToken, authorize('lecturer'), quizResultController.getAllQuizResults);
 
 module.exports = router;

@@ -92,7 +92,7 @@ export default function QuizHistoryItemByCourse({ history }) {
             history?._id
           )}
           state={{ linkFrom: "quizManager" }}
-          className="flex items-center text-sm gap-2 px-2 py-2 border border-yellow-500 text-yellow-600 rounded-lg font-medium hover:bg-yellow-500 hover:text-white transition-colors duration-300"
+          className="flex items-center text-sm gap-2 px-2 py-2 border border-yellow-500 text-yellow-600 rounded-lg font-medium hover:bg-yellow-100 transition-colors duration-300"
         >
           Xem chi tiết
           <ArrowForwardIcon fontSize="small" />

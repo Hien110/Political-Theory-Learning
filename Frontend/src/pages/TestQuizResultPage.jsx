@@ -153,7 +153,7 @@ function TestQuizResultPage() {
         {linkFrom === "quizHistory" ? (
           <Link
             to={ROUTE_PATH.USER_PROFILE}
-            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
+            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại trang cá nhân
           </Link>
@@ -163,7 +163,7 @@ function TestQuizResultPage() {
               ":courseId",
               result.course?._id
             )}
-            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
+            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại bài học
           </Link>
@@ -173,7 +173,7 @@ function TestQuizResultPage() {
               ":courseId",
               result.course?._id
             ).replace(":quizId", result.quiz?._id)}
-            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
+            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại
           </Link>
@@ -183,7 +183,7 @@ function TestQuizResultPage() {
               ":studentId",
               result.student?._id
             )}
-            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors duration-400 font-medium shadow"
+            className="px-5 py-3 bg-white border border-red-600 text-red-600 rounded-lg hover:bg-red-100 transition-colors duration-400 font-medium shadow"
           >
             ⬅ Quay lại
           </Link>

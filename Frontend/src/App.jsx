@@ -1,26 +1,36 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ScrollToTop from "./ScrollToTop";
-import AppRoutes from "./config/routes";
+import AppRoute from "./config/routes";
 import React from "react";
-import { Toaster } from 'sonner';
+import ProtectedRoute from "./components/ProtectedRoute";
+import { Toaster } from "sonner";
 
 function App() {
   return (
     <BrowserRouter>
-      <Toaster position="top-right" richColors expand={true} />
       <ScrollToTop />
+      <Toaster position="top-right" richColors />
       <Routes>
-        {AppRoutes.map((route, index) => {
+        {AppRoute.map((route, index) => {
           const Layout = route.layout || React.Fragment;
           const Page = route.page;
+          const element = (
+            <Layout>
+              <Page />
+            </Layout>
+          );
           return (
             <Route
               key={index}
               path={route.path}
               element={
-                <Layout>
-                  <Page />
-                </Layout>
+                route.allowedRoles ? (
+                  <ProtectedRoute allowedRoles={route.allowedRoles}>
+                    {element}
+                  </ProtectedRoute>
+                ) : (
+                  element
+                )
               }
             />
           );

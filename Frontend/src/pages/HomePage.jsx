@@ -34,7 +34,7 @@ function HomePage() {
       </div>
 
       {/* Marquee Section */}
-      <div className="bg-yellow-500 text-red-900 py-1 overflow-hidden whitespace-nowrap fixed top-20 w-full z-10">
+      <div className="bg-yellow-500 text-red-900 py-1 overflow-hidden whitespace-nowrap fixed top-15 w-full z-10">
         <div className="animate-marquee font-medium flex space-x-12 px-4">
           <span>
             Học tập và làm theo tư tưởng, đạo đức, phong cách Hồ Chí Minh
