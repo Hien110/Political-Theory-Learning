@@ -31,6 +31,10 @@ function ManageQuizResultDetailPage() {
        <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
          Kết quả bài kiểm tra
       </h1>
+      <div className="mb-4 text-red-400">
+        <span className="font-bold">Tổng số bài làm:</span> {quizResult.length}{" "}
+        bài làm
+      </div>
       {quizResult.length != 0 ? (
         <div>
           {quizResult.map(item => (

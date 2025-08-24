@@ -95,11 +95,11 @@ function Footer() {
               </li>
               <li className="flex items-center">
                 <i className="fas fa-phone-alt mr-2"></i>
-                <span>0123 456 789</span>
+                <span>0356 555 425</span>
               </li>
               <li className="flex items-center">
                 <i className="fas fa-envelope mr-2"></i>
-                <span>info@onlaptructuyen.edu.vn</span>
+                <span>politicaltheory.learning@gmail.com</span>
               </li>
             </ul>
           </div>

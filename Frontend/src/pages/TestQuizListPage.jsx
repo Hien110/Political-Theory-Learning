@@ -40,7 +40,7 @@ function TestQuizListPage() {
       ]);
 
       if (!existingQuizResult?.success || !quizTest?.success) {
-        toast.error("Không thể tải dữ liệu bài quiz");
+        toast.error("Không thể làm bài kiểm tra");
         return;
       }
 
@@ -80,7 +80,7 @@ function TestQuizListPage() {
             className="group bg-white shadow-md rounded-2xl p-6 border border-gray-200 hover:shadow-xl hover:border-yellow-500 transition"
           >
             {/* Thông tin quiz */}
-            <h2 className="text-xl font-bold text-yellow-700 group-hover:text-yellow-600 transition">
+            <h2 className="text-xl font-bold text-yellow-600 group-hover:text-yellow-400 transition">
               {quiz.title}
             </h2>
             <p className="text-gray-500 mt-2">
@@ -103,7 +103,7 @@ function TestQuizListPage() {
             {/* Nút hành động */}
             <button
               onClick={() => handleQuizTest(quiz._id)}
-              className="mt-4 w-full py-2 border border-yellow-600 text-yellow-600 font-semibold rounded-xl hover:bg-yellow-600 hover:text-white transition duration-300 cursor-pointer"
+              className="mt-4 w-full py-2 border border-yellow-600 text-yellow-600 font-semibold rounded-xl hover:bg-yellow-100 transition duration-300 cursor-pointer"
             >
               Làm bài ngay
             </button>

@@ -150,7 +150,8 @@ const UserProfile = () => {
             </div>
             <div className="text-center mt-4 p-4">
               <h2 className="text-xl font-bold text-black">{user.name}</h2>
-              <p className="text-gray-600">K{user.yearOfAdmission}</p>
+              { user.role === "student" && <p className="text-gray-600">Sinh viên</p>}
+              { user.role === "lecturer" && <p className="text-gray-600">Giảng viên</p>}
               <div className="mt-4 space-x-3 flex justify-center">
                 <button
                   onClick={() => setShowUpdateModal(true)}
@@ -181,15 +182,17 @@ const UserProfile = () => {
                   </div>
                 </div>
               </li>
-              <li>
-                <div className="flex items-center">
-                  <SchoolOutlinedIcon className="text-gray-600 mr-4" />
-                  <div>
-                    <p className="text-gray-800 text-[14px]">Khóa học</p>
-                    <p className="text-gray-600">K{user.yearOfAdmission}</p>
+              {user.role === "student" && (
+                <li>
+                  <div className="flex items-center">
+                    <SchoolOutlinedIcon className="text-gray-600 mr-4" />
+                    <div>
+                      <p className="text-gray-800 text-[14px]">Khóa học</p>
+                      <p className="text-gray-600">K{user.yearOfAdmission}</p>
+                    </div>
                   </div>
-                </div>
-              </li>
+                </li>
+              )}
               <li>
                 <div className="flex items-center">
                   <EmailOutlinedIcon className="text-gray-600 mr-4" />
@@ -272,26 +275,28 @@ const UserProfile = () => {
                 </div>
 
                 {/* Khóa học */}
-                <div>
-                  <label className="block font-medium text-gray-700 mb-1 text-sm">
-                    Khóa học
-                  </label>
-                  <select
-                    value={yearOfAdmission}
-                    onChange={(e) => setYearOfAdmission(e.target.value)}
-                    name="yearOfAdmission"
-                    className="w-full border rounded px-3 py-2"
-                  >
-                    {Array.from({ length: 10 }, (_, i) => {
-                      const value = 16 + i;
-                      return (
-                        <option key={value} value={value}>
-                          K{value}
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
+                {user.role === "student" && (
+                  <div>
+                    <label className="block font-medium text-gray-700 mb-1 text-sm">
+                      Khóa học
+                    </label>
+                    <select
+                      value={yearOfAdmission}
+                      onChange={(e) => setYearOfAdmission(e.target.value)}
+                      name="yearOfAdmission"
+                      className="w-full border rounded px-3 py-2"
+                    >
+                      {Array.from({ length: 10 }, (_, i) => {
+                        const value = 16 + i;
+                        return (
+                          <option key={value} value={value}>
+                            K{value}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </div>
+                )}
 
                 {/* Ảnh đại diện upload */}
                 <div>

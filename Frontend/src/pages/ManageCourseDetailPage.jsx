@@ -288,6 +288,11 @@ function ManageCourseDetailPage() {
           Danh sách bài học
         </h2>
 
+        {/* Tổng số bài học */}
+        <div className="mb-4 text-red-400">
+          <span className="font-bold text-red-400">Tổng số bài học:</span> {lessons.length}{" "}
+          bài học
+        </div>
         {lessons.length === 0 ? (
           <p className="text-gray-500 italic">Chưa có bài học nào</p>
         ) : (
@@ -428,7 +433,7 @@ function ManageCourseDetailPage() {
                       hover:bg-red-700 transition-colors duration-300 
                       disabled:opacity-60 
                       ${loadingLesson ? "cursor-wait" : "cursor-pointer"}`}
-                      >
+          >
             {loadingLesson ? "Đang tạo..." : "Tạo bài học"}
           </button>
         </form>

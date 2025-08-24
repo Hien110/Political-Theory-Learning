@@ -47,6 +47,10 @@ function ManageQuizResultCoursePage() {
       <h1 className="text-3xl font-bold mb-8 text-gray-800 border-b border-gray-200 pb-2">
         Kết quả bài kiểm tra
       </h1>
+      <div className="mb-4 text-red-400">
+        <span className="font-bold">Tổng số bài kiểm tra:</span> {quizzes.length}{" "}
+        bài kiểm tra
+      </div>
       <div className="mb-6">
         <input
           type="text"

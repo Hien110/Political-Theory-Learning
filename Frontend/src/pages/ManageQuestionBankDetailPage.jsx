@@ -275,7 +275,7 @@ function ManageQuestionBankDetailPage() {
   const filteredQuestions = questionList.filter((item) =>
     item.question.toLowerCase().includes(searchTerm.toLowerCase())
   );
-  
+
   if (loading) {
     return <p className="text-center min-h-screen">Loading...</p>;
   }
@@ -286,7 +286,11 @@ function ManageQuestionBankDetailPage() {
       <h1 className="text-3xl font-bold mb-4 text-gray-800 border-b border-gray-300 pb-3">
         Ngân hàng câu hỏi
       </h1>
-
+      {/* Tổng số câu hỏi */}
+      <div className="mb-4 text-red-400">
+        <span className="font-bold">Tổng số câu hỏi:</span> {questionList.length}{" "}
+        câu hỏi
+      </div>
       {/* Ô tìm kiếm */}
       <div className="mb-6">
         <input
