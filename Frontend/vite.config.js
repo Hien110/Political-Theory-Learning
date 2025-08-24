@@ -10,10 +10,10 @@ export default defineConfig({
   plugins: [react(), tailwindcss()],
   server: {
     proxy: {
-      "/api": {
-        target: "https://political-theory-learning.onrender.com",
-        changeOrigin: true,
-      },
+      // "/api": {
+      //   target: "https://political-theory-learning.onrender.com",
+      //   changeOrigin: true,
+      // },
       "/auth": {
         target: "https://political-theory-learning.onrender.com",
         changeOrigin: true,

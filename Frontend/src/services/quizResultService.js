@@ -1,7 +1,7 @@
 import axios from "axios";
 import userService from "./userService";
 
-const API_URL = '/api/quiz-results';
+const API_URL = 'https://political-theory-learning.onrender.com/api/quiz-results';
 
 const quizResultService = {
     // Tạo kết quả quiz

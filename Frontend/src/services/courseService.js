@@ -1,7 +1,7 @@
 import axios from "axios";
 import userService from "./userService";
 
-const API_URL = "/api/courses";
+const API_URL = "https://political-theory-learning.onrender.com/api/courses";
 
 const courseService = {
   createCourse: async (newCourse) => {
