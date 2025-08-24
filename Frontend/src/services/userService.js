@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "/api/users"; // sẽ được proxy đến http://localhost:3000/api/users
+const API_URL = "https://political-theory-learning.onrender.com/api/users"; // sẽ được proxy đến http://localhost:3000/api/users
 
 const userService = {
   // Đăng nhập người dùng

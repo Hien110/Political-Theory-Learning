@@ -2,7 +2,7 @@ import axios from "axios";
 
 import userService from "./userService";
 
-const API_URL = "/api/lessons";
+const API_URL = "https://political-theory-learning.onrender.com/api/lessons";
 
 const lessonService = {
   // Tạo bài học
