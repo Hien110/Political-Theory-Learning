@@ -19,7 +19,7 @@ db.connect();
 
 // Cấu hình CORS
 app.use(cors({
-    origin: 'http://political-theory-learning.vercel.app',
+    origin: 'https://political-theory-learning.vercel.app',
     credentials: true
 }));
 
