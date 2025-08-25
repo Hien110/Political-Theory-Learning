@@ -1,17 +1,8 @@
 // middlewares/uploadExcel.js
 const multer = require("multer");
-const path = require("path");
 
-// Cấu hình nơi lưu file tạm
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // thư mục tạm
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname); // lấy đuôi file
-    cb(null, Date.now() + ext); // đặt tên file: timestamp + ext
-  }
-});
+// Dùng memoryStorage thay vì diskStorage
+const storage = multer.memoryStorage();
 
 // Bộ lọc chỉ cho phép Excel
 const fileFilter = (req, file, cb) => {

@@ -135,6 +135,7 @@ const questionBankService = {
         {
           headers: {
             Authorization: `Bearer ${userService.getToken()}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
