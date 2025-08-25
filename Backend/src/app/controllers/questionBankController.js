@@ -111,7 +111,7 @@ const QuestionBankController = {
       }
 
       // Đọc file Excel
-      const workbook = XLSX.readFile(req.file.path);
+      const workbook = XLSX.read(req.file.buffer, { type: "buffer" });
       const sheetName = workbook.SheetNames[0];
       const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
 
@@ -157,17 +157,7 @@ const QuestionBankController = {
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: "File excel không hợp lệ, vui lòng xem file mẫu" });
-    } finally {
-      // Xóa file tạm nếu tồn tại
-      if (req.file.path) {
-        try {
-          await fs.unlink(req.file.path);
-          console.log(`Đã xóa file tạm: ${req.file.path}`);
-        } catch (err) {
-          console.error("Lỗi khi xóa file tạm:", err);
-        }
-      }
-    }
+    } 
   },
 
   // Xóa tất cả câu hỏi theo courseId có nghĩa là đổi status deleted thành true
