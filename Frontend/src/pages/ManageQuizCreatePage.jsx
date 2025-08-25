@@ -13,6 +13,7 @@ function ManageQuizCreatePage() {
   const [title, setTitle] = useState("");
   const [timeLimit, setTimeLimit] = useState(1);
   const [attempts, setAttempts] = useState(1);
+  const [loading, setLoading] = useState(false);
 
   const [questionBank, setQuestionBank] = useState([]);
   const [selectedQuestions, setSelectedQuestions] = useState([]);
@@ -112,6 +113,7 @@ function ManageQuizCreatePage() {
     };
 
     try {
+      setLoading(true);
       const response = await QuizService.createQuiz(courseId, newQuiz);
       if (response.success) {
         // Reset form
@@ -125,6 +127,8 @@ function ManageQuizCreatePage() {
       }
     } catch (error) {
       toast.error("Lỗi khi tạo quiz", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -291,7 +295,7 @@ function ManageQuizCreatePage() {
             type="submit"
             className="cursor-pointer py-3 px-4 w-full rounded-xl text-white font-semibold bg-red-500 hover:bg-red-600 shadow-md transition-all duration-300"
           >
-            Tạo bài kiểm tra
+            {loading ? "Đang tạo..." : "Tạo bài kiểm tra"}
           </button>
         </div>
       </form>

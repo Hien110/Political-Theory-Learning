@@ -139,7 +139,7 @@ function CourseDetailPage() {
                   <div>
                     <button
                       onClick={() => handleViewLesson(lesson._id)}
-                      className="cursor-pointer text-yellow-600 border border-yellow-600 px-4 py-2 text-sm rounded-lg hover:bg-yellow-600 hover:text-white font-medium transition duration-300"
+                      className="cursor-pointer text-yellow-600 border border-yellow-600 px-4 py-2 text-sm rounded-lg hover:bg-yellow-100 font-medium transition duration-300"
                     >
                       Xem chi tiết
                     </button>
@@ -189,7 +189,7 @@ function CourseDetailPage() {
                   <div>
                     <button
                       onClick={() => handleQuizTest(quiz._id)}
-                      className="cursor-pointer text-yellow-600 border border-yellow-600 px-4 py-2 text-sm rounded-lg hover:bg-yellow-600 hover:text-white font-medium transition duration-300"
+                      className="cursor-pointer text-yellow-600 border border-yellow-600 px-4 py-2 text-sm rounded-lg hover:bg-yellow-100 font-medium transition duration-300"
                     >
                       Làm bài ngay
                     </button>
